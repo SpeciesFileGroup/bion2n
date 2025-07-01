@@ -1,31 +1,65 @@
 {
-  "name": "n8n",
-  "version": "0.190.0",
-  "private": true,
-  "homepage": "https://n8n.io",
+  "name": "n8n-nodes-bion2n",
+  "version": "0.1.0",
+  "description": "Provides a set of nodes for n8n to interact with biodiversity informatics APIs including Bionomia, Barcode of Life (BOLD), Catalogue of Life (COL), ChecklistBank, Global Biodiversity Information Facility (GBIF), Global Names Architecture, Global Biotic Interactions (GloBI), Integrated Taxonomic Information System (ITIS), Open Tree of Life, TaxonWorks, Wikidata, and ZooBank.",
+  "keywords": [
+    "n8n-community-node-package"
+  ],
+  "license": "MIT",
+  "homepage": "",
+  "author": {
+    "name": "Geoff Ower",
+    "email": "gdower@illinois.edu"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/SpeciesFileGroup/n8n-nodes-bion2n.git"
+  },
+  "engines": {
+    "node": ">=20.15"
+  },
+  "main": "index.js",
   "scripts": {
-    "build": "turbo run build",
-    "dev": "turbo run dev --parallel",
-    "clean:dist": "npm exec -ws -- rimraf ./dist",
-    "format": "turbo run format",
-    "lint": "turbo run lint",
-    "lintfix": "turbo run lintfix",
-    "optimize-svg": "find ./packages -name '*.svg' ! -name 'pipedrive.svg' -print0 | xargs -0 -P16 -L20 npx svgo",
-    "start": "run-script-os",
-    "start:default": "cd packages/cli/bin && ./n8n",
-    "start:windows": "cd packages/cli/bin && n8n",
-    "test": "turbo run test",
-    "watch": "turbo run watch",
-    "webhook": "./packages/cli/bin/n8n webhook",
-    "worker": "./packages/cli/bin/n8n worker"
+    "build": "tsc && gulp build:icons",
+    "dev": "tsc --watch",
+    "format": "prettier nodes credentials --write",
+    "lint": "eslint nodes credentials package.json",
+    "lintfix": "eslint nodes credentials package.json --fix",
+    "prepublishOnly": "npm build && npm lint -c .eslintrc.prepublish.js nodes credentials package.json"
+  },
+  "files": [
+    "dist"
+  ],
+  "n8n": {
+    "n8nNodesApiVersion": 1,
+    "credentials": [
+      "dist/credentials/TaxonWorksProjectApi.credentials.js",
+      "dist/credentials/TaxonWorksUserApi.credentials.js"
+    ],
+    "nodes": [
+      "dist/nodes/Bionomia/Bionomia.node.js",
+      "dist/nodes/Bold/Bold.node.js",
+      "dist/nodes/CatalogueOfLife/CatalogueOfLife.node.js",
+      "dist/nodes/ChecklistBankDataset/ChecklistBankDataset.node.js",
+      "dist/nodes/Gbif/Gbif.node.js",
+      "dist/nodes/GlobalNames/GlobalNames.node.js",
+      "dist/nodes/GloBI/GloBI.node.js",
+      "dist/nodes/Itis/Itis.node.js",
+      "dist/nodes/OpenTree/OpenTree.node.js",
+      "dist/nodes/TaxonWorks/TaxonWorks.node.js",
+      "dist/nodes/Wikidata/Wikidata.node.js",
+      "dist/nodes/ZooBank/ZooBank.node.js"
+    ]
   },
   "devDependencies": {
-    "rimraf": "^3.0.2",
-    "run-script-os": "^1.0.7",
-    "turbo": "1.2.15"
+    "@typescript-eslint/parser": "~8.32.0",
+    "eslint": "^8.57.0",
+    "eslint-plugin-n8n-nodes-base": "^1.16.3",
+    "gulp": "^5.0.0",
+    "prettier": "^3.5.3",
+    "typescript": "^5.8.2"
   },
-  "postcss": {},
-  "workspaces": [
-    "packages/*"
-  ]
+  "peerDependencies": {
+    "n8n-workflow": "*"
+  }
 }

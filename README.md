@@ -1,19 +1,56 @@
-# Biology Node2Node (BioN2N): Connecting biodiversity informatics APIs to the powerful n8n workflow automation platform
+![Banner image](https://user-images.githubusercontent.com/10284570/173569848-c624317f-42b1-45a6-ab09-f0ea3c247648.png)
 
-BioN2N is a new project to develop biodiversity informatics nodes for the powerful workflow automation platform, [n8n.io](https://n8n.io), which enables building complex data workflows fast with little to no programming experience.
+# n8n-nodes-bion2n
+
+Biology Node to Node (BioN2N) is an open source project to develop biodiversity informatics nodes for the powerful workflow automation platform, [n8n.io](https://n8n.io), which enables building complex data workflows fast with little to no programming experience.
 
 ## Contents
 * [Abstract](https://github.com/speciesfilegroup/bion2n#abstract)
-* [Demo workflows](https://github.com/speciesfilegroup/bion2n#demo-workflows)
+* [Available nodes](https://github.com/speciesfilegroup/bion2n#available-nodes)
 * [Installation](https://github.com/speciesfilegroup/bion2n#installation)
-* [Acknowledgements](https://github.com/speciesfilegroup/bion2n#acknowledgements)
+* [Demo workflows](https://github.com/speciesfilegroup/bion2n#demo-workflows)
+* [Development](https://github.com/SpeciesFileGroup/bion2n?tab=readme-ov-file#development)
 * [References](https://github.com/speciesfilegroup/bion2n#references)
 
 ## Abstract
 
 A vast amount of biodiversity data is available from many different biodiversity informatics APIs. However, in order for scientists with little to no programming experience to use data from these APIs for their research, it could potentially require a significant time investment to learn a programming language, develop, and rigorously test the software. The emergence of no-code and low-code software architecture [[1](https://github.com/speciesfilegroup/bion2n#1), [2](https://github.com/speciesfilegroup/bion2n#2)] could potentially empower non-programmers with the ability to utilize biodiversity informatics APIs, helping to make these APIs more accessible to a broader number of people. Instead of writing scripts, no-code/low-code applications offer flexible graphical user interfaces that can make it easier to explore and learn APIs, and quickly construct complex data processing workflows. One such open source low-code application is [n8n.io](https://n8n.io), which is a powerful workflow automation platform. Within n8n, nodes are the basic unit of work and can take input, perform processing, and return output. To build an automation workflow, any nodes needed are added to the workspace and their inputs and outputs are connected together. For example, if you wanted to be notified about new species added to a genus in Catalogue of Life (CoL), you could query the CatalogueOfLife node for all species in genus _Maghrebotrogus_, use the GoogleSheet node to check if each species is in your known list of species spreadsheet, use the Gmail node to send an email notification about any new species, save any new species to your list of known species with the GoogleSheet node, and run the automated workflow on a schedule (see [Demo 1](https://github.com/speciesfilegroup/bion2n#demo-1)). Over 220 popular internet APIs have been wrapped into nodes within n8n, which could additionally allow integrating scientific knowledge with many other services on the internet. A major advantage offered by the n8n automation platform is that reusable workflows can be [shared as templates](https://n8n.io/workflows/), which could enable building a collaborative community of biodiversity informatics API users.
 
-BioN2N is a new open source project to develop and maintain n8n nodes to wrap biodiversity informatics APIs that will be contributed back upstream to the n8n project. So far nodes have been developed for Barcode of Life, Bionomia, Catalogue of Life, ChecklistBank Datasets, Global Biodiversity Information Facility, Global Names, Integrated Taxonomic Information System, Open Tree of Life, TaxonWorks, Wikidata, ZooBank, and additional nodes are under development (please [open an issue ticket if you want a biology API wrapped](https://github.com/SpeciesFileGroup/bion2n/issues/new?assignees=&labels=&template=node_request.md&title=)). 
+BioN2N is an open source project to develop and maintain n8n nodes to wrap biodiversity informatics APIs that will be contributed back upstream to the n8n project. So far nodes have been developed for Barcode of Life, Bionomia, Catalogue of Life, ChecklistBank Datasets, Global Biodiversity Information Facility, Global Names, Integrated Taxonomic Information System, Open Tree of Life, TaxonWorks, Wikidata, ZooBank, and additional nodes are under development (please [open an issue ticket if you want a biology API wrapped](https://github.com/SpeciesFileGroup/bion2n/issues/new?assignees=&labels=&template=node_request.md&title=)).
+
+## Available nodes
+
+Currently these APIs have nodes provided through BioN2N:
+
+* [Barcode of Life (BOLD)](https://boldsystems.org)
+* [Bionomia](https://bionomia.net)
+* [Catalogue of Life (COL)](https://www.catalogueoflife.org)
+* [ChecklistBank](https://www.checklistbank.org) Datasets
+* [Global Biodiversity Information Facility (GBIF)](https://www.gbif.org)
+* [Global Biotic Interactions (GloBI)](https://www.globalbioticinteractions.org)
+* [Global Names Architecture (GNA)](https://globalnames.org)
+* [Integrated Taxonomic Information System (ITIS)](https://itis.gov)
+* [Open Tree of Life](https://tree.opentreeoflife.org)
+* [TaxonWorks](https://taxonworks.org/)
+* [Wikidata](https://www.wikidata.org)
+* [ZooBank](https://zoobank.org/)
+
+Need other nodes? Please [open an issue](https://github.com/SpeciesFileGroup/bion2n/issues/new?template=node_request.md) ticket. Code contributions are also welcome!
+
+
+## Installation
+
+1) Follow the [n8n guide on self-hosting the community edition of n8n](https://docs.n8n.io/hosting/).
+
+2) Login to your local installation of n8n, which following the standard installation process will be located at: http://localhost:5678
+
+3) Navigate to the [community nodes settings](http://localhost:5678/settings/community-nodes).
+
+4) Click the `Install a community node` button.
+
+5) Type in n8n-nodes-bion2n, check the box indicating that you understand the risks of installing unverified code from a public source, and click install.
+
+6) The BioN2N nodes will be available in your workspace. Search for any of the nodes.
 
 ## Demo workflows
 
@@ -47,45 +84,17 @@ This automated workflow draws a random species from Catalogue of Life and sends 
 ](https://user-images.githubusercontent.com/8573609/184546199-37f2e9c7-db2f-4ea8-87a0-7f45cb5faf11.png)
 
 
-## Installation
+## Development
 
-If not installed already, please install the dependency [npm](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm) on your platform downloadable [here](https://nodejs.org/en/download/).
+N8N has [excellent documentation on community node development](https://docs.n8n.io/integrations/creating-nodes/overview/) including [how to test nodes](https://docs.n8n.io/integrations/creating-nodes/test/) that are under development.
 
-1) Clone this repo:
-```
-git clone https://github.com/SpeciesFileGroup/bion2n.git
-```
+## Contributing
 
-2) Change directories into bion2n:
-```
-cd bion2n
-```
+Bug reports and pull requests are welcome on [GitHub](https://github.com/SpeciesFileGroup/bion2n). This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [code of conduct](https://github.com/SpeciesFileGroup/bion2n/blob/main/CODE_OF_CONDUCT.md).
 
-3) Install npm dependencies
-```
-npm install
-```
+## License
 
-4) Run the build process
-```
-npm run build
-```
-
-5) Run n8n with BioN2N nodes
-```
-npm run start
-```
-Launch your web browser and navigate to [http://localhost:5678](http://localhost:5678)
-
-6) If you are a developer, instead of running start, run in development mode:
-```
-npm run dev
-```
-Launch your web browser and navigate to [http://localhost:8080](http://localhost:8080)
-
-## Acknowledgements
-
-I am very grateful to the [n8n.io founder Jan Oberhauser](https://blog.n8n.io/celebrating-n8n-second-anniversary/), and n8n.io team and [community](https://community.n8n.io/) for developing the low-code application and the developers of the biodiversity informatics APIs that this work depends upon. Many thanks to our [Species File Group](https://speciesfilegroup.org/about.html) founder David Eades, and all of my colleagues for their ideas, inspiration, and support: Beth Frank, Deborah Paul, Dmitry Dmitriev, Dmitry Mozzherin, Heidi Hopkins, Hernán Pereira, Jim Tucker, José Luis Pereira, Leslie Deem, Matt Yoder, R. Edward DeWalt, Rich Flood, and Yury Ruskov. In memory of Marilyn Beckman.
+The BioN2N nodes are available as open source under the terms of the [MIT](https://opensource.org/licenses/MIT) license.
 
 ## References
 
