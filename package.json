@@ -1,6 +1,6 @@
 {
   "name": "n8n-nodes-bion2n",
-  "version": "0.1.0",
+  "version": "0.0.1",
   "description": "Provides a set of nodes for n8n to interact with biodiversity informatics APIs including Bionomia, Barcode of Life (BOLD), Catalogue of Life (COL), ChecklistBank, Global Biodiversity Information Facility (GBIF), Global Names Architecture, Global Biotic Interactions (GloBI), Integrated Taxonomic Information System (ITIS), Open Tree of Life, TaxonWorks, Wikidata, and ZooBank.",
   "keywords": [
     "n8n-community-node-package"
@@ -13,19 +13,19 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/SpeciesFileGroup/n8n-nodes-bion2n.git"
+    "url": "https://github.com/SpeciesFileGroup/bion2n.git"
   },
   "engines": {
     "node": ">=20.15"
   },
   "main": "index.js",
   "scripts": {
-    "build": "tsc && gulp build:icons",
+    "build": "npx rimraf dist && tsc && gulp build:icons",
     "dev": "tsc --watch",
     "format": "prettier nodes credentials --write",
     "lint": "eslint nodes credentials package.json",
     "lintfix": "eslint nodes credentials package.json --fix",
-    "prepublishOnly": "npm build && npm lint -c .eslintrc.prepublish.js nodes credentials package.json"
+    "prepublishOnly": "npm run build && npm run lint -c .eslintrc.prepublish.js nodes credentials package.json"
   },
   "files": [
     "dist"
@@ -52,12 +52,17 @@
     ]
   },
   "devDependencies": {
+    "@eslint/js": "^9.30.1",
+    "@eslint/json": "^0.12.0",
+    "@eslint/markdown": "^6.6.0",
     "@typescript-eslint/parser": "~8.32.0",
-    "eslint": "^8.57.0",
+    "eslint": "^9.30.1",
     "eslint-plugin-n8n-nodes-base": "^1.16.3",
+    "globals": "^16.3.0",
     "gulp": "^5.0.0",
     "prettier": "^3.5.3",
-    "typescript": "^5.8.2"
+    "typescript": "^5.8.2",
+    "typescript-eslint": "^8.35.1"
   },
   "peerDependencies": {
     "n8n-workflow": "*"
