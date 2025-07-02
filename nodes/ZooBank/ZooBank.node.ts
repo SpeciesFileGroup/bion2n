@@ -6,7 +6,7 @@ import type {
 	INodeTypeDescription,
 	IHttpRequestOptions,
 } from 'n8n-workflow';
-import { NodeConnectionType } from 'n8n-workflow';
+import { NodeConnectionTypes } from 'n8n-workflow';
 
 export class ZooBank implements INodeType {
 	description: INodeTypeDescription = {
@@ -18,10 +18,9 @@ export class ZooBank implements INodeType {
 		description: 'ZooBank is a central, authoritative and comprehensive resource for scientific names in zoology',
 		defaults: {
 			name: 'ZooBank',
-			color: '#31309c',
 		},
-		inputs: [NodeConnectionType.Main],
-		outputs: [NodeConnectionType.Main],
+		inputs: [NodeConnectionTypes.Main],
+		outputs: [NodeConnectionTypes.Main],
 		credentials: [
 		],
 		properties: [
@@ -29,9 +28,10 @@ export class ZooBank implements INodeType {
 				displayName: 'Resource',
 				name: 'resource',
 				type: 'options',
+				noDataExpression: true,
 				options: [
 					{
-						name: 'Authors',
+						name: 'Author',
 						value: 'authors',
 					},
 					{
@@ -39,30 +39,30 @@ export class ZooBank implements INodeType {
 						value: 'gnieMatching',
 					},
 					{
-						name: 'Identifiers',
+						name: 'Identifier',
 						value: 'identifiers',
 					},
 					{
-						name: 'Publications',
+						name: 'Publication',
 						value: 'publications',
 					},
 					{
-						name: 'Statistics',
+						name: 'Statistic',
 						value: 'statistics',
 					},
 					{
-						name: 'Taxon Name Usages',
+						name: 'Taxon Name Usage',
 						value: 'taxonNameUsages',
 					},
 				],
-				default: '',
+				default: 'authors',
 				required: true,
-				description: 'Resource to consume',
 			},
 			{
 				displayName: 'Operation',
 				name: 'operation',
 				type: 'options',
+				noDataExpression: true,
 				displayOptions: {
 					show: {
 						resource: [
@@ -80,10 +80,10 @@ export class ZooBank implements INodeType {
 						name: 'Get',
 						value: 'get',
 						description: 'Get a resource',
+						action: 'Get an authors',
 					},
 				],
 				default: 'get',
-				description: 'The operation to perform.',
 			},
 			{
 				displayName: 'Additional Fields',
@@ -106,7 +106,6 @@ export class ZooBank implements INodeType {
 						displayName: 'ID',
 						name: 'id',
 						type: 'string',
-						required: false,
 						default:'',
 						description:'An author UUID (e.g., 8C466CBE-3F7D-4DC9-8CBD-26DD3F57E212',
 					},
@@ -114,7 +113,6 @@ export class ZooBank implements INodeType {
 						displayName: 'Search Term',
 						name: 'searchTerm',
 						type: 'string',
-						required: false,
 						default:'',
 						description:'A search term',
 					},
@@ -122,7 +120,6 @@ export class ZooBank implements INodeType {
 						displayName: 'Term',
 						name: 'term',
 						type: 'string',
-						required: false,
 						default:'',
 						description:'An autocomplete term',
 					},
@@ -149,7 +146,6 @@ export class ZooBank implements INodeType {
 						displayName: 'ID',
 						name: 'id',
 						type: 'string',
-						required: false,
 						default:'',
 						description:'A protonym UUID (e.g., FFF7160A-372D-40E9-9611-23AF5D9EAC4C)',
 					},
@@ -176,7 +172,6 @@ export class ZooBank implements INodeType {
 						displayName: 'ID',
 						name: 'id',
 						type: 'string',
-						required: false,
 						default:'',
 						description:'A UUID (e.g., 6EA8BB2A-A57B-47C1-953E-042D8CD8E0E2)',
 					},
@@ -203,7 +198,6 @@ export class ZooBank implements INodeType {
 						displayName: 'ID',
 						name: 'id',
 						type: 'string',
-						required: false,
 						default:'',
 						description:'A publication UUID (e.g., 427D7953-E8FC-41E8-BEA7-8AE644E6DE77)',
 					},
@@ -211,7 +205,6 @@ export class ZooBank implements INodeType {
 						displayName: 'Search Term',
 						name: 'searchTerm',
 						type: 'string',
-						required: false,
 						default:'',
 						description:'A search term',
 					},
@@ -219,7 +212,6 @@ export class ZooBank implements INodeType {
 						displayName: 'Term',
 						name: 'term',
 						type: 'string',
-						required: false,
 						default:'',
 						description:'An autocomplete term',
 					},
@@ -246,14 +238,14 @@ export class ZooBank implements INodeType {
 						displayName: 'Start Date',
 						name: 'startDate',
 						type: 'string',
-						default: false,
+						default: '',
 						description: 'The start date in format mm/dd/yyyy',
 					},
 					{
 						displayName: 'End Date',
 						name: 'endDate',
 						type: 'string',
-						default: false,
+						default: '',
 						description: 'The end date in format mm/dd/yyyy',
 					},
 					{
@@ -299,7 +291,6 @@ export class ZooBank implements INodeType {
 						displayName: 'ID',
 						name: 'id',
 						type: 'string',
-						required: false,
 						default:'',
 						description:'An taxon name usage UUID (e.g., 6EA8BB2A-A57B-47C1-953E-042D8CD8E0E2)',
 					},
@@ -307,15 +298,13 @@ export class ZooBank implements INodeType {
 						displayName: 'Scientific Name',
 						name: 'sciName',
 						type: 'string',
-						required: false,
 						default:'',
-						description:'A scientific name (e.g.,  Aedes aegtypi)',
+						description: 'A scientific name (e.g., Aedes aegtypi)',
 					},
 					{
 						displayName: 'Search Term',
 						name: 'searchTerm',
 						type: 'string',
-						required: false,
 						default:'',
 						description:'A search term',
 					},

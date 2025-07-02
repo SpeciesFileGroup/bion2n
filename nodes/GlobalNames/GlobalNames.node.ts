@@ -6,7 +6,7 @@ import type {
 	INodeTypeDescription,
 	IHttpRequestOptions,
 } from 'n8n-workflow';
-import { NodeConnectionType } from 'n8n-workflow';
+import { NodeConnectionTypes } from 'n8n-workflow';
 
 export class GlobalNames implements INodeType {
 	description: INodeTypeDescription = {
@@ -18,10 +18,9 @@ export class GlobalNames implements INodeType {
 		description: 'GlobalNames helps parse, find, and verify scientific names',
 		defaults: {
 			name: 'GlobalNames',
-			color: '#007934',
 		},
-		inputs: [NodeConnectionType.Main],
-		outputs: [NodeConnectionType.Main],
+		inputs: [NodeConnectionTypes.Main],
+		outputs: [NodeConnectionTypes.Main],
 		credentials: [
 		],
 		properties: [
@@ -29,6 +28,7 @@ export class GlobalNames implements INodeType {
 				displayName: 'Resource',
 				name: 'resource',
 				type: 'options',
+				noDataExpression: true,
 				options: [
 					{
 						name: 'Finder',
@@ -45,12 +45,12 @@ export class GlobalNames implements INodeType {
 				],
 				default: 'parse',
 				required: true,
-				description: 'Resource to consume',
 			},
 			{
 				displayName: 'Operation',
 				name: 'operation',
 				type: 'options',
+				noDataExpression: true,
 				displayOptions: {
 					show: {
 						resource: [
@@ -63,15 +63,16 @@ export class GlobalNames implements INodeType {
 						name: 'Post',
 						value: 'post',
 						description: 'Find scientific names',
+						action: 'Post a finder',
 					},
 				],
-				default: 'get',
-				description: 'The operation to perform.',
+				default: 'post',
 			},
 			{
 				displayName: 'Operation',
 				name: 'operation',
 				type: 'options',
+				noDataExpression: true,
 				displayOptions: {
 					show: {
 						resource: [
@@ -84,15 +85,16 @@ export class GlobalNames implements INodeType {
 						name: 'Get',
 						value: 'get',
 						description: 'Get a parsed scientific name',
+						action: 'Get a parse',
 					},
 				],
 				default: 'get',
-				description: 'The operation to perform.',
 			},
 			{
 				displayName: 'Operation',
 				name: 'operation',
 				type: 'options',
+				noDataExpression: true,
 				displayOptions: {
 					show: {
 						resource: [
@@ -105,13 +107,13 @@ export class GlobalNames implements INodeType {
 						name: 'Get',
 						value: 'get',
 						description: 'Get a scientific name verification',
+						action: 'Get a verify',
 					},
 				],
 				default: 'get',
-				description: 'The operation to perform.',
 			},
 			{
-				displayName: 'Scientific name',
+				displayName: 'Scientific Name',
 				name: 'name',
 				type: 'string',
 				required: true,
@@ -168,7 +170,6 @@ export class GlobalNames implements INodeType {
 						name: 'bytesOffset',
 						type: 'boolean',
 						default: false,
-						required: false,
 						description: 'This flag changes how the position of a detected name in text is calculated. Normally a name\'s start and end positions are given as the number of UTF-8 characters from the beginning of the text. If bytesOffset flag is true, the start and end offsets are recalculated in the number of bytes.',
 					},
 					{
@@ -176,7 +177,6 @@ export class GlobalNames implements INodeType {
 						name: 'language',
 						type: 'string',
 						default: '',
-						required: false,
 						description: 'The language of the text (e.g., eng). Language value is used for calculation of Bayesian odds. If this parameter is not given, english language is used by default. Currently only English and German languages are supported.',
 					},
 					{
@@ -184,15 +184,13 @@ export class GlobalNames implements INodeType {
 						name: 'noBayes',
 						type: 'boolean',
 						default: false,
-						required: false,
-						description: 'If this flag is true, only heuristic algorithms are used for name detection.',
+						description: 'If this flag is true, only heuristic algorithms are used for name detection',
 					},
 					{
 						displayName: 'Odds Details',
 						name: 'oddsDetails',
 						type: 'boolean',
 						default: false,
-						required: false,
 						description: 'If true, the result will contain odds of all features used for calculation of NaiveBayes odds. The odds describe probabiliby of a name to be \'real\'. The higher the odds, the higher the probability that a dectected name is not a false positive. Odds are calculated by multiplication of the odds of separate features. Odds details explain how the final odds value is calculated.',
 					},
 					{
@@ -200,7 +198,6 @@ export class GlobalNames implements INodeType {
 						name: 'returnContent',
 						type: 'boolean',
 						default: false,
-						required: false,
 						description: 'If this flag is true, the text used for the name detection is returned back. This flag is especially useful if the input was not a plain UTF-8 text and had to be prepared for name-finding. Then the returned content can be used together with start and end fields of detected name-strings to locate the strings in the text.',
 					},
 					{
@@ -208,15 +205,13 @@ export class GlobalNames implements INodeType {
 						name: 'text',
 						type: 'string',
 						default: '',
-						required: false,
-						description: 'Contains the text which will be checked for scientific names. If this parameter is not empty, the url paramter is ignored.',
+						description: 'Contains the text which will be checked for scientific names. If this parameter is not empty, the URL paramter is ignored.',
 					},
 					{
 						displayName: 'Unique Names',
 						name: 'uniqueNames',
 						type: 'boolean',
 						default: false,
-						required: false,
 						description: 'If this flag is true, the output returns a list of unique names, instead of a list of all name occurrences. Unique list of names does not provide position information of a name in the text.',
 					},
 					{
@@ -224,15 +219,13 @@ export class GlobalNames implements INodeType {
 						name: 'url',
 						type: 'string',
 						default: '',
-						required: false,
-						description: 'If text parameter is empty, and url is given, GNfinder will process the URL and will find names in the content of its body.',
+						description: 'If text parameter is empty, and URL is given, GNfinder will process the URL and will find names in the content of its body',
 					},
 					{
 						displayName: 'Verification',
 						name: 'verification',
 						type: 'boolean',
 						default: false,
-						required: false,
 						description: 'When this flag is true, there is an addional verification step for detected names. This step requires internet connection and uses the Global Names verification API for queries.',
 					},
 					{
@@ -240,7 +233,6 @@ export class GlobalNames implements INodeType {
 						name: 'wordsAround',
 						type: 'number',
 						default: 0,
-						required: false,
 						description: 'Allows to see the context surrounding a name-string. The wordsAround parameter sets the number of words returned to output, which are located immediately before or after a detected name. Default is 0, maximum value is 5.',
 					},
 				],

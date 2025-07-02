@@ -6,22 +6,21 @@ import type {
 	INodeTypeDescription,
 	IHttpRequestOptions,
 } from 'n8n-workflow';
-import { NodeConnectionType } from 'n8n-workflow';
+import { NodeConnectionTypes } from 'n8n-workflow';
 
 export class GloBI implements INodeType {
 	description: INodeTypeDescription = {
 		displayName: 'GloBI',
-		name: 'gloBI',
+		name: 'gloBi',
 		icon: 'file:gloBI.svg',
 		group: ['transform'],
 		version: 1,
 		description: 'Global Biotic Interactions (GloBI) provides open access to finding species interaction data',
 		defaults: {
 			name: 'GloBI',
-			color: '#007934',
 		},
-		inputs: [NodeConnectionType.Main],
-		outputs: [NodeConnectionType.Main],
+		inputs: [NodeConnectionTypes.Main],
+		outputs: [NodeConnectionTypes.Main],
 		credentials: [
 		],
 		properties: [
@@ -29,6 +28,7 @@ export class GloBI implements INodeType {
 				displayName: 'Resource',
 				name: 'resource',
 				type: 'options',
+				noDataExpression: true,
 				options: [
 					{
 						name: 'Interaction',
@@ -41,12 +41,12 @@ export class GloBI implements INodeType {
 				],
 				default: 'interaction',
 				required: true,
-				description: 'Resource to consume',
 			},
 			{
 				displayName: 'Operation',
 				name: 'operation',
 				type: 'options',
+				noDataExpression: true,
 				displayOptions: {
 					show: {
 						resource: [
@@ -60,10 +60,10 @@ export class GloBI implements INodeType {
 						name: 'Get',
 						value: 'get',
 						description: 'Get a parsed scientific name',
+						action: 'Get an interaction',
 					},
 				],
 				default: 'get',
-				description: 'The operation to perform.',
 			},
 			{
 				displayName: 'Source Taxon Name',
@@ -262,13 +262,12 @@ export class GloBI implements INodeType {
 						value: 'adjacentTo',
 					},
 				],
-				default: '',
+				default: 'eats',
 			},
 			{
 				displayName: 'Target Taxon Name',
 				name: 'targetTaxon',
 				type: 'string',
-				required: false,
 				displayOptions: {
 					show: {
 						operation: [
@@ -307,15 +306,15 @@ export class GloBI implements INodeType {
 						type: 'options',
 						options: [
 							{
-								name: 'csv',
+								name: 'Csv',
 								value: 'csv',
 							},
 							{
-								name: 'dot',
+								name: 'Dot',
 								value: 'dot',
 							},
 							{
-								name: 'json',
+								name: 'Json',
 								value: 'json',
 							},
 						],

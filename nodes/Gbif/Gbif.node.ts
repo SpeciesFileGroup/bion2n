@@ -6,7 +6,7 @@ import type {
 	INodeTypeDescription,
 	IHttpRequestOptions,
 } from 'n8n-workflow';
-import { NodeConnectionType } from 'n8n-workflow';
+import { NodeConnectionTypes } from 'n8n-workflow';
 
 function setUrlParameters(parameter: string, values: string, urlParams= ''): string {
 	values.split(',').forEach((value: string) => {
@@ -25,10 +25,9 @@ export class Gbif implements INodeType {
 		description: 'GBIF provides free and open access to biodiversity data',
 		defaults: {
 			name: 'GBIF',
-			color: '#4c9e45',
 		},
-		inputs: [NodeConnectionType.Main],
-		outputs: [NodeConnectionType.Main],
+		inputs: [NodeConnectionTypes.Main],
+		outputs: [NodeConnectionTypes.Main],
 		credentials: [
 		],
 		properties: [
@@ -36,6 +35,7 @@ export class Gbif implements INodeType {
 				displayName: 'Resource',
 				name: 'resource',
 				type: 'options',
+				noDataExpression: true,
 				options: [
 					{
 						name: 'Collection',
@@ -62,7 +62,7 @@ export class Gbif implements INodeType {
 						value: 'occurrence',
 					},
 					{
-						name: 'Occurrence Counts',
+						name: 'Occurrence Count',
 						value: 'occurrenceCounts',
 					},
 					{
@@ -126,14 +126,14 @@ export class Gbif implements INodeType {
 						value: 'speciesSuggest',
 					},
 				],
-				default: '',
+				default: 'collection',
 				required: true,
-				description: 'Resource to consume',
 			},
 			{
 				displayName: 'Operation',
 				name: 'operation',
 				type: 'options',
+				noDataExpression: true,
 				displayOptions: {
 					show: {
 						resource: [
@@ -167,16 +167,15 @@ export class Gbif implements INodeType {
 						name: 'Get',
 						value: 'get',
 						description: 'Get a resource',
+						action: 'Get a collection',
 					},
 				],
 				default: 'get',
-				description: 'The operation to perform.',
 			},
 			{
 				displayName: 'ID',
 				name: 'id',
 				type: 'string',
-				required: false,
 				default: '',
 				description: 'The taxon ID',
 				displayOptions: {
@@ -194,7 +193,6 @@ export class Gbif implements INodeType {
 				displayName: 'ID',
 				name: 'id',
 				type: 'string',
-				required: false,
 				default: '',
 				description: 'The collection ID',
 				displayOptions: {
@@ -214,7 +212,6 @@ export class Gbif implements INodeType {
 				type: 'string',
 				default: '',
 				description: 'The dataset ID',
-				required: false,
 				displayOptions: {
 					show: {
 						resource: [
@@ -232,7 +229,6 @@ export class Gbif implements INodeType {
 				type: 'string',
 				default: '',
 				description: 'The installation ID',
-				required: false,
 				displayOptions: {
 					show: {
 						resource: [
@@ -250,7 +246,6 @@ export class Gbif implements INodeType {
 				type: 'string',
 				default: '',
 				description: 'The institution ID',
-				required: false,
 				displayOptions: {
 					show: {
 						resource: [
@@ -268,7 +263,6 @@ export class Gbif implements INodeType {
 				type: 'string',
 				default: '',
 				description: 'The network ID',
-				required: false,
 				displayOptions: {
 					show: {
 						resource: [
@@ -304,7 +298,6 @@ export class Gbif implements INodeType {
 				type: 'string',
 				default: '',
 				description: 'The organization ID',
-				required: false,
 				displayOptions: {
 					show: {
 						resource: [
@@ -322,7 +315,6 @@ export class Gbif implements INodeType {
 				type: 'string',
 				default: '',
 				description: 'The node ID',
-				required: false,
 				displayOptions: {
 					show: {
 						resource: [
@@ -352,7 +344,7 @@ export class Gbif implements INodeType {
 				},
 			},
 			{
-				displayName: 'Sub-resource',
+				displayName: 'Sub-Resource',
 				name: 'subResource',
 				type: 'options',
 				default: '',
@@ -406,7 +398,7 @@ export class Gbif implements INodeType {
 				],
 			},
 			{
-				displayName: 'Sub-resource',
+				displayName: 'Sub-Resource',
 				name: 'subResource',
 				type: 'options',
 				default: '',
@@ -468,7 +460,7 @@ export class Gbif implements INodeType {
 				],
 			},
 			{
-				displayName: 'Sub-resource',
+				displayName: 'Sub-Resource',
 				name: 'subResource',
 				type: 'options',
 				default: '',
@@ -518,7 +510,7 @@ export class Gbif implements INodeType {
 				],
 			},
 			{
-				displayName: 'Sub-resource',
+				displayName: 'Sub-Resource',
 				name: 'subResource',
 				type: 'options',
 				default: '',
@@ -572,7 +564,7 @@ export class Gbif implements INodeType {
 				],
 			},
 			{
-				displayName: 'Sub-resource',
+				displayName: 'Sub-Resource',
 				name: 'subResource',
 				type: 'options',
 				default: '',
@@ -602,7 +594,7 @@ export class Gbif implements INodeType {
 				],
 			},
 			{
-				displayName: 'Sub-resource',
+				displayName: 'Sub-Resource',
 				name: 'subResource',
 				type: 'options',
 				default: '',
@@ -644,7 +636,7 @@ export class Gbif implements INodeType {
 				],
 			},
 			{
-				displayName: 'Sub-resource',
+				displayName: 'Sub-Resource',
 				name: 'subResource',
 				type: 'options',
 				default: '',
@@ -694,7 +686,7 @@ export class Gbif implements INodeType {
 				],
 			},
 			{
-				displayName: 'Sub-resource',
+				displayName: 'Sub-Resource',
 				name: 'subResource',
 				type: 'options',
 				default: '',
@@ -752,7 +744,7 @@ export class Gbif implements INodeType {
 				],
 			},
 			{
-				displayName: 'Sub-resource',
+				displayName: 'Sub-Resource',
 				name: 'subResource',
 				type: 'options',
 				default: '',
@@ -811,7 +803,7 @@ export class Gbif implements INodeType {
 				],
 			},
 			{
-				displayName: 'Sub-resource',
+				displayName: 'Sub-Resource',
 				name: 'subResource',
 				type: 'options',
 				options: [
@@ -873,7 +865,6 @@ export class Gbif implements INodeType {
 					},
 				],
 				default: '',
-				required: false,
 				displayOptions: {
 					show: {
 						resource: [
@@ -889,7 +880,6 @@ export class Gbif implements INodeType {
 				displayName: 'Query',
 				name: 'q',
 				type: 'string',
-				required: false,
 				default: '',
 				description: 'Simple full text search parameter as a simple word or a phrase',
 				displayOptions: {
@@ -933,7 +923,6 @@ export class Gbif implements INodeType {
 						displayName: 'Country',
 						name: 'country',
 						type: 'string',
-						required: false,
 						default: '',
 						description: 'Filters by country given as a ISO 639-1 (2 letter) country code',
 					},
@@ -942,16 +931,13 @@ export class Gbif implements INodeType {
 						name: 'identifier',
 						type: 'string',
 						default: '',
-						required: false,
 						description: 'The value for this parameter can be a simple string or integer (e.g., identifier=120)',
 					},
 					{
 						displayName: 'Identifier Type',
 						name: 'identifierType',
 						type: 'options',
-						default: '',
-						required: false,
-						description: '',
+						default: 'cites',
 						options: [
 							{
 								name: 'CITES',
@@ -1048,7 +1034,6 @@ export class Gbif implements INodeType {
 						displayName: 'Query',
 						name: 'q',
 						type: 'string',
-						required: false,
 						default: '',
 						description: 'Simple search parameter. The value for this parameter can be a simple word or a phrase. Wildcards can be added to the simple word parameters only, e.g. q=*puma*.',
 					},
@@ -1056,8 +1041,7 @@ export class Gbif implements INodeType {
 						displayName: 'Type',
 						name: 'type',
 						type: 'options',
-						default: '',
-						required: false,
+						default: 'checklist',
 						description: 'Filters by type of dataset',
 						options: [
 							{
@@ -1101,8 +1085,7 @@ export class Gbif implements INodeType {
 						displayName: 'Continent',
 						name: 'continent',
 						type: 'options',
-						required: false,
-						default: '',
+						default: 'africa',
 						description: 'Filter datasets by their continent',
 						options: [
 							{
@@ -1139,7 +1122,6 @@ export class Gbif implements INodeType {
 						displayName: 'Country',
 						name: 'country',
 						type: 'string',
-						required: false,
 						default: '',
 						description: 'Filters by country given as a ISO 639-1 (2 letter) country code',
 					},
@@ -1148,14 +1130,12 @@ export class Gbif implements INodeType {
 						name: 'decade',
 						type: 'string',
 						default: '',
-						required: false,
-						description: 'Filters datasets by their temporal coverage broken down to decades. Decades are given as a full year, e.g. 1880, 1960, 2000, etc, and will return datasets wholly contained in the decade as well as those that cover the entire decade or more',
+						description: 'Filters datasets by their temporal coverage broken down to decades. Decades are given as a full year, e.g. 1880, 1960, 2000, etc, and will return datasets wholly contained in the decade as well as those that cover the entire decade or more.',
 					},
 					{
 						displayName: 'Endorsing Node Key',
 						name: 'endorsingNodeKey',
 						type: 'string',
-						required: false,
 						default: '',
 						description: 'Node key that endorsed this dataset\'s publisher',
 					},
@@ -1163,9 +1143,7 @@ export class Gbif implements INodeType {
 						displayName: 'Facet',
 						name: 'facet',
 						type: 'multiOptions',
-						required: false,
-						default: '',
-						description: '',
+						default: [],
 						options: [
 							{
 								name: 'Country',
@@ -1192,7 +1170,7 @@ export class Gbif implements INodeType {
 								value: 'publishingOrg',
 							},
 							{
-								name: 'Sub-type',
+								name: 'Sub-Type',
 								value: 'subtype',
 							},
 							{
@@ -1227,16 +1205,13 @@ export class Gbif implements INodeType {
 						name: 'identifier',
 						type: 'string',
 						default: '',
-						required: false,
 						description: 'The value for this parameter can be a simple string or integer (e.g., identifier=120)',
 					},
 					{
 						displayName: 'Identifier Type',
 						name: 'identifierType',
 						type: 'options',
-						default: '',
-						required: false,
-						description: '',
+						default: 'cites',
 						options: [
 							{
 								name: 'CITES',
@@ -1312,7 +1287,6 @@ export class Gbif implements INodeType {
 						displayName: 'Keyword',
 						name: 'keyword',
 						type: 'string',
-						required: false,
 						default: '',
 						description: 'Filters datasets by a case insensitive plain text keyword. The search is done on the merged collection of tags, the dataset keywordCollections and temporalCoverages.',
 					},
@@ -1320,7 +1294,6 @@ export class Gbif implements INodeType {
 						displayName: 'License',
 						name: 'license',
 						type: 'options',
-						required: false,
 						default: '',
 						options: [
 							{
@@ -1382,7 +1355,6 @@ export class Gbif implements INodeType {
 						name: 'projectId',
 						type: 'string',
 						default: '',
-						required: false,
 						description: 'Filter or facet based on the project ID of a given dataset. A dataset can have a project ID if it is the result of a project. Multiple datasets can have the same project ID.',
 					},
 					{
@@ -1400,12 +1372,10 @@ export class Gbif implements INodeType {
 						default: '',
 					},
 					{
-						displayName: 'Sub-type',
+						displayName: 'Sub-Type',
 						name: 'subtype',
 						type: 'options',
-						default: '',
-						required: false,
-						description: '',
+						default: 'derived_from_occurrence',
 						options: [
 							{
 								name: 'Derived From Occurrence',
@@ -1445,8 +1415,7 @@ export class Gbif implements INodeType {
 						displayName: 'Type',
 						name: 'type',
 						type: 'options',
-						default: '',
-						required: false,
+						default: 'checklist',
 						description: 'Filters by type of dataset',
 						options: [
 							{
@@ -1491,8 +1460,6 @@ export class Gbif implements INodeType {
 						name: 'datasetKey',
 						type: 'string',
 						default: '',
-						required: false,
-						description: '',
 					},
 				],
 			},
@@ -1517,9 +1484,7 @@ export class Gbif implements INodeType {
 						displayName: 'Basis of Record',
 						name: 'basisOfRecord',
 						type: 'options',
-						default: '',
-						required: false,
-						description: 'The basis of record',
+						default: 'fossil_specimen',
 						options: [
 							{
 								name: 'Fossil Specimen',
@@ -1568,7 +1533,6 @@ export class Gbif implements INodeType {
 						name: 'catalogNumber',
 						type: 'string',
 						default: '',
-						required: false,
 						description: 'An identifier of any form assigned by the source within a physical collection or digital dataset for the record which may not be unique, but should be fairly unique in combination with the institution and collection code',
 					},
 					{
@@ -1576,7 +1540,6 @@ export class Gbif implements INodeType {
 						name: 'classKey',
 						type: 'string',
 						default: '',
-						required: false,
 						description: 'The class classification key',
 					},
 					{
@@ -1584,15 +1547,13 @@ export class Gbif implements INodeType {
 						name: 'collectionCode',
 						type: 'string',
 						default: '',
-						required: false,
 						description: 'An identifier of any form assigned by the source to identify the physical collection or digital dataset uniquely within the context of an institution',
 					},
 					{
 						displayName: 'Continent',
 						name: 'continent',
 						type: 'options',
-						required: false,
-						default: '',
+						default: 'africa',
 						description: 'Filter datasets by their continent',
 						options: [
 							{
@@ -1630,8 +1591,7 @@ export class Gbif implements INodeType {
 						name: 'coordinateUncertaintyInMeters',
 						type: 'string',
 						default: '',
-						description: 'The horizontal distance (in meters) from the given decimalLatitude and decimalLongitude describing the smallest circle containing the whole of the Location (e.g., use "100,200" for an uncertainty of 100 - 200 meters).',
-						required: false,
+						description: 'The horizontal distance (in meters) from the given decimalLatitude and decimalLongitude describing the smallest circle containing the whole of the Location (e.g., use "100,200" for an uncertainty of 100 - 200 meters)',
 					},
 					{
 						displayName: 'Country',
@@ -1645,14 +1605,12 @@ export class Gbif implements INodeType {
 						name: 'crawlId',
 						type: 'string',
 						default: '',
-						description: '',
 					},
 					{
 						displayName: 'Dataset ID',
 						name: 'datasetId',
 						type: 'string',
 						default: '',
-						required: false,
 						description: 'The ID of the dataset',
 					},
 					{
@@ -1660,15 +1618,12 @@ export class Gbif implements INodeType {
 						name: 'datasetKey',
 						type: 'string',
 						default: '',
-						required: false,
-						description: '',
 					},
 					{
 						displayName: 'Dataset Name',
 						name: 'datasetName',
 						type: 'string',
 						default: '',
-						required: false,
 						description: 'The name of the dataset',
 					},
 					{
@@ -1676,7 +1631,6 @@ export class Gbif implements INodeType {
 						name: 'decimalLatitude',
 						type: 'string',
 						default: '',
-						required: false,
 						description: 'Latitude in decimals between -90 and 90 based on spatial reference system WGS84 (e.g., -81.14,-80.79)',
 					},
 					{
@@ -1684,7 +1638,6 @@ export class Gbif implements INodeType {
 						name: 'decimalLongitude',
 						type: 'string',
 						default: '',
-						required: false,
 						description: 'Longitude in decimals between -180 and 180 based on spatial reference system WGS84 (e.g., -160.38,-154.23)',
 					},
 					{
@@ -1692,7 +1645,6 @@ export class Gbif implements INodeType {
 						name: 'depth',
 						type: 'string',
 						default: '',
-						required: false,
 						description: 'Depth in meters relative to altitude (e.g., use 10,30 for 10 to 30 meters below a lake surface with given altitude)',
 					},
 					{
@@ -1700,16 +1652,14 @@ export class Gbif implements INodeType {
 						name: 'elevation',
 						type: 'string',
 						default: '',
-						required: false,
 						description: 'Elevation (altitude) in meters above sea level (e.g., 10000,14000 for an altitude of 10000 to 14000 meters)',
 					},
 					{
 						displayName: 'Establishment Means',
 						name: 'establishmentMeans',
 						type: 'options',
-						default: '',
-						required: false,
-						description: 'Whether the taxon is native, introduced, invasive, etc.',
+						default: 'introduced',
+						description: 'Whether the taxon is native, introduced, invasive, etc',
 						options: [
 							{
 								name: 'Introduced',
@@ -1742,7 +1692,6 @@ export class Gbif implements INodeType {
 						name: 'eventDate',
 						type: 'string',
 						default: '',
-						required: false,
 						description: 'Occurrence date in ISO 8601 format: yyyy, yyyy-MM, yyyy-MM-dd, or MM-dd (e.g., use 2021-01-01 for an exact date or use 2021-01-01,2021-01-31 for a date range)',
 					},
 					{
@@ -1750,7 +1699,6 @@ export class Gbif implements INodeType {
 						name: 'eventId',
 						type: 'string',
 						default: '',
-						required: false,
 						description: 'An identifier for the information associated with a sampling event',
 					},
 					{
@@ -1758,7 +1706,6 @@ export class Gbif implements INodeType {
 						name: 'familyKey',
 						type: 'string',
 						default: '',
-						required: false,
 						description: 'The family classification key',
 					},
 					{
@@ -1766,7 +1713,6 @@ export class Gbif implements INodeType {
 						name: 'format',
 						type: 'options',
 						default: '',
-						required: false,
 						description: 'The export format',
 						options: [
 							{
@@ -1774,11 +1720,11 @@ export class Gbif implements INodeType {
 								value: '',
 							},
 							{
-								name: 'Comma separated value',
+								name: 'Comma Separated Value',
 								value: 'CSV',
 							},
 							{
-								name: 'Tab separated value',
+								name: 'Tab Separated Value',
 								value: 'TSV',
 							},
 						],
@@ -1788,7 +1734,6 @@ export class Gbif implements INodeType {
 						name: 'fromDate',
 						type: 'string',
 						default: '',
-						required: false,
 						description: 'Start partial date of a date range in the format of yyyy-MM (e.g., 2015-11)',
 					},
 					{
@@ -1796,15 +1741,13 @@ export class Gbif implements INodeType {
 						name: 'gadmGid',
 						type: 'string',
 						default: '',
-						required: false,
 						description: 'A GADM geographic identifier at any level (e.g., AGO, AGO.1_1, AGO.1.1_1 or AGO.1.1.1_1)',
 					},
 					{
 						displayName: 'GADM Region Level',
 						name: 'gadmLevel',
 						type: 'options',
-						default: '',
-						required: false,
+						default: '0',
 						description: 'A GADM region level, valid values range from 0 to 3',
 						options: [
 							{
@@ -1830,7 +1773,6 @@ export class Gbif implements INodeType {
 						name: 'gadmLevel0Gid',
 						type: 'string',
 						default: '',
-						required: false,
 						description: 'A GADM geographic identifier at the zero level (e.g., AGO)',
 					},
 					{
@@ -1838,7 +1780,6 @@ export class Gbif implements INodeType {
 						name: 'gadmLevel1Gid',
 						type: 'string',
 						default: '',
-						required: false,
 						description: 'A GADM geographic identifier at the one level (e.g., AGO.1_1)',
 					},
 					{
@@ -1846,7 +1787,6 @@ export class Gbif implements INodeType {
 						name: 'gadmLevel2Gid',
 						type: 'string',
 						default: '',
-						required: false,
 						description: 'A GADM geographic identifier at the two level (e.g., AFG.1.1_1)',
 					},
 					{
@@ -1854,7 +1794,6 @@ export class Gbif implements INodeType {
 						name: 'gadmLevel3Gid',
 						type: 'string',
 						default: '',
-						required: false,
 						description: 'A GADM geographic identifier at the three level (e.g., AFG.1.1.1_1)',
 					},
 					{
@@ -1862,7 +1801,6 @@ export class Gbif implements INodeType {
 						name: 'genusKey',
 						type: 'string',
 						default: '',
-						required: false,
 						description: 'The genus classification key',
 					},
 					{
@@ -1870,7 +1808,6 @@ export class Gbif implements INodeType {
 						name: 'geoDistance',
 						type: 'string',
 						default: '',
-						required: false,
 						description: 'Filters to match occurrence records with coordinate values within a specified distance of a coordinate, it supports units: in, yd, ft, km, mmi, mm, cm, mi, or m (e.g., 90m,100m)',
 					},
 					{
@@ -1878,7 +1815,6 @@ export class Gbif implements INodeType {
 						name: 'geometry',
 						type: 'string',
 						default: '',
-						required: false,
 						description: 'Searches for occurrences inside a polygon described in Well Known Text (WKT) format. Only POINT, LINESTRING, LINEARRING, POLYGON and MULTIPOLYGON are accepted WKT types (e.g., POLYGON((30.1 10.1, 40 40, 20 40, 10 20, 30.1 10.1))). Polygons must have anticlockwise ordering of points, or will give unpredictable results. A clockwise polygon represents the opposite area: the Earth\'s surface with a \'hole\' in it and such queries are not supported.',
 					},
 					{
@@ -1886,7 +1822,6 @@ export class Gbif implements INodeType {
 						name: 'hasCoordinate',
 						type: 'boolean',
 						default: false,
-						required: false,
 						description: 'Limits searches to occurrence records which contain a value in both latitude and longitude (e.g., hasCoordinate=true limits to occurrence records with coordinate values and hasCoordinate=false limits to occurrence records without coordinate values)',
 					},
 					{
@@ -1894,15 +1829,13 @@ export class Gbif implements INodeType {
 						name: 'hasGeospatialIssue',
 						type: 'boolean',
 						default: false,
-						required: false,
-						description: 'Includes/excludes occurrence records which contain spatial issues as determined by GBIF\'s record interpretation (e.g., hasGeospatialIssue=true returns only those records with spatial issues while hasGeospatialIssue=false includes only records without spatial issues. The absence of this parameter returns any record with or without spatial issues.)',
+						description: 'Includes/excludes occurrence records which contain spatial issues as determined by GBIF\'s record interpretation (e.g., hasGeospatialIssue=true returns only those records with spatial issues while hasGeospatialIssue=false includes only records without spatial issues. The absence of this parameter returns any record with or without spatial issues.).',
 					},
 					{
 						displayName: 'Identified By',
 						name: 'identifiedBy',
 						type: 'string',
 						default: '',
-						required: false,
 						description: 'The person who provided the taxonomic identification of the occurrence',
 					},
 					{
@@ -1910,7 +1843,6 @@ export class Gbif implements INodeType {
 						name: 'identifiedById',
 						type: 'string',
 						default: '',
-						required: false,
 						description: 'Identifier (e.g., ORCID) for the person who provided the taxonomic identification of the occurrence',
 					},
 					{
@@ -1918,7 +1850,6 @@ export class Gbif implements INodeType {
 						name: 'institutionCode',
 						type: 'string',
 						default: '',
-						required: false,
 						description: 'An identifier of any form assigned by the source to identify the institution. Institution codes are not guaranteeed to be unique.',
 					},
 					{
@@ -1926,7 +1857,6 @@ export class Gbif implements INodeType {
 						name: 'issue',
 						type: 'options',
 						default: '',
-						required: false,
 						description: 'A specific interpretation issue',
 						options: [
 							{
@@ -2026,7 +1956,7 @@ export class Gbif implements INodeType {
 								value: 'depth_min_max_swapped',
 							},
 							{
-								name: 'Depth Non-numeric',
+								name: 'Depth Non-Numeric',
 								value: 'depth_non_numeric',
 							},
 							{
@@ -2046,7 +1976,7 @@ export class Gbif implements INodeType {
 								value: 'elevation_min_max_swapped',
 							},
 							{
-								name: 'Elevation Non-numeric',
+								name: 'Elevation Non-Numeric',
 								value: 'elevation_non_numeric',
 							},
 							{
@@ -2208,7 +2138,6 @@ export class Gbif implements INodeType {
 						name: 'kingdomKey',
 						type: 'string',
 						default: '',
-						required: false,
 						description: 'The kingdom classification key',
 					},
 					{
@@ -2216,7 +2145,6 @@ export class Gbif implements INodeType {
 						name: 'lastInterpreted',
 						type: 'string',
 						default: '',
-						required: false,
 						description: 'The date the record was last changed in GBIF in ISO-8601 format: yyyy, yyyy-MM, yyyy-MM-dd, or MM-dd (e.g., 2020,2021 for year range 2020 - 2021), which is not necessarily the date the record was first/last changed by the publisher. Data is re-interpreted when GBIF changes the taxonomic backbone, geographic data sources, or interpretation processes.',
 					},
 					{
@@ -2224,7 +2152,6 @@ export class Gbif implements INodeType {
 						name: 'license',
 						type: 'options',
 						default: '',
-						required: false,
 						description: 'The type license applied to the dataset or record',
 						options: [
 							{
@@ -2258,7 +2185,6 @@ export class Gbif implements INodeType {
 						name: 'limit',
 						type: 'string',
 						default: '20',
-						required: false,
 						description: 'The limit of results to return with a maximum of 300',
 					},
 					{
@@ -2266,7 +2192,6 @@ export class Gbif implements INodeType {
 						name: 'locality',
 						type: 'string',
 						default: '',
-						required: false,
 						description: 'The specific description of the place',
 					},
 					{
@@ -2274,7 +2199,6 @@ export class Gbif implements INodeType {
 						name: 'mediaType',
 						type: 'options',
 						default: '',
-						required: false,
 						description: 'The kind of multimedia associated with an occurrence',
 						options: [
 							{
@@ -2300,7 +2224,6 @@ export class Gbif implements INodeType {
 						name: 'modified',
 						type: 'string',
 						default: '',
-						required: false,
 						description: 'The most recent date-time on which the resource was changed, according to the publisher',
 					},
 					{
@@ -2308,7 +2231,6 @@ export class Gbif implements INodeType {
 						name: 'month',
 						type: 'string',
 						default: '',
-						required: false,
 						description: 'The month of the year, starting with 1 for January (e.g., 1 for January or 1,4 for January through April)',
 					},
 					{
@@ -2316,7 +2238,6 @@ export class Gbif implements INodeType {
 						name: 'networkKey',
 						type: 'string',
 						default: '',
-						required: false,
 						description: 'The GBIF Network to which the occurrence belongs',
 					},
 					{
@@ -2324,7 +2245,6 @@ export class Gbif implements INodeType {
 						name: 'occurrenceId',
 						type: 'string',
 						default: '',
-						required: false,
 						description: 'A single globally unique identifier for the occurrence record as provided by the publisher',
 					},
 					{
@@ -2332,7 +2252,6 @@ export class Gbif implements INodeType {
 						name: 'occurrenceStatus',
 						type: 'options',
 						default: '',
-						required: false,
 						description: 'The presence or absence of the occurrence',
 						options: [
 							{
@@ -2354,7 +2273,6 @@ export class Gbif implements INodeType {
 						name: 'orderKey',
 						type: 'string',
 						default: '',
-						required: false,
 						description: 'The order classification key',
 					},
 					{
@@ -2362,7 +2280,6 @@ export class Gbif implements INodeType {
 						name: 'organismId',
 						type: 'string',
 						default: '',
-						required: false,
 						description: 'An identifier for the Organism instance (as opposed to a particular digital record of the Organism). May be a globally unique identifier or an identifier specific to the data set.',
 					},
 					{
@@ -2370,7 +2287,6 @@ export class Gbif implements INodeType {
 						name: 'organismQuantity',
 						type: 'string',
 						default: '',
-						required: false,
 						description: 'A number or enumeration value for the quantity of organisms',
 					},
 					{
@@ -2378,7 +2294,6 @@ export class Gbif implements INodeType {
 						name: 'organismQuantityType',
 						type: 'string',
 						default: '',
-						required: false,
 						description: 'The type of quantification system used for the quantity of organisms',
 					},
 					{
@@ -2386,7 +2301,6 @@ export class Gbif implements INodeType {
 						name: 'otherCatalogNumbers',
 						type: 'string',
 						default: '',
-						required: false,
 						description: 'Previous or alternate fully qualified catalog numbers',
 					},
 					{
@@ -2394,7 +2308,6 @@ export class Gbif implements INodeType {
 						name: 'phylumKey',
 						type: 'string',
 						default: '',
-						required: false,
 						description: 'The phylum classification key',
 					},
 					{
@@ -2402,7 +2315,6 @@ export class Gbif implements INodeType {
 						name: 'preparations',
 						type: 'string',
 						default: '',
-						required: false,
 						description: 'Preparation or preservation method for a specimen',
 					},
 					{
@@ -2410,7 +2322,6 @@ export class Gbif implements INodeType {
 						name: 'programme',
 						type: 'string',
 						default: '',
-						required: false,
 						description: 'A group of activities, often associated with a specific funding stream, such as the GBIF BID programme',
 					},
 					{
@@ -2418,7 +2329,6 @@ export class Gbif implements INodeType {
 						name: 'projectId',
 						type: 'string',
 						default: '',
-						required: false,
 						description: 'The identifier for a project, which is often assigned by a funded programme',
 					},
 					{
@@ -2426,7 +2336,6 @@ export class Gbif implements INodeType {
 						name: 'protocol',
 						type: 'string',
 						default: '',
-						required: false,
 						description: 'Protocol or mechanism used to provide the occurrence record',
 					},
 					{
@@ -2434,7 +2343,6 @@ export class Gbif implements INodeType {
 						name: 'publishingCountry',
 						type: 'string',
 						default: '',
-						required: false,
 						description: 'The 2-letter country code (as per ISO-3166-1) of the publishing organization\'s country',
 					},
 					{
@@ -2442,7 +2350,6 @@ export class Gbif implements INodeType {
 						name: 'publishingOrg',
 						type: 'string',
 						default: '',
-						required: false,
 						description: 'The publishing organization (e.g., Illinois Natural History Survey)',
 					},
 					{
@@ -2450,7 +2357,6 @@ export class Gbif implements INodeType {
 						name: 'recordedBy',
 						type: 'string',
 						default: '',
-						required: false,
 						description: 'The person who recorded the occurrence (e.g., Carl Linnaeus)',
 					},
 					{
@@ -2458,7 +2364,6 @@ export class Gbif implements INodeType {
 						name: 'recordedById',
 						type: 'string',
 						default: '',
-						required: false,
 						description: 'Identifier (e.g., ORCID) for the person who recorded the occurrence',
 					},
 					{
@@ -2466,7 +2371,6 @@ export class Gbif implements INodeType {
 						name: 'recordNumber',
 						type: 'string',
 						default: '',
-						required: false,
 						description: 'An identifier given to the record at the time it was recorded in the field',
 					},
 					{
@@ -2474,7 +2378,6 @@ export class Gbif implements INodeType {
 						name: 'relativeOrganismQuantity',
 						type: 'string',
 						default: '',
-						required: false,
 						description: 'The relative measurement of the quantity of the organism (e.g., without absolute units)',
 					},
 					{
@@ -2482,7 +2385,6 @@ export class Gbif implements INodeType {
 						name: 'repatriated',
 						type: 'boolean',
 						default: false,
-						required: false,
 						description: 'Searches for records whose publishing country is different from the country in which it was recorded',
 					},
 					{
@@ -2490,7 +2392,6 @@ export class Gbif implements INodeType {
 						name: 'sampleSizeUnit',
 						type: 'string',
 						default: '',
-						required: false,
 						description: 'The unit of measurement of the size (time duration, length, area, or volume) of a sample in a sampling event',
 					},
 					{
@@ -2498,7 +2399,6 @@ export class Gbif implements INodeType {
 						name: 'sampleSizeValue',
 						type: 'string',
 						default: '',
-						required: false,
 						description: 'A numeric value for a measurement of the size (time duration, length, area, or volume) of a sample in a sampling event',
 					},
 					{
@@ -2506,7 +2406,6 @@ export class Gbif implements INodeType {
 						name: 'samplingProtocol',
 						type: 'string',
 						default: '',
-						required: false,
 						description: 'The name of, reference to, or description of the method or protocol used during a sampling event',
 					},
 					{
@@ -2514,7 +2413,6 @@ export class Gbif implements INodeType {
 						name: 'scientificName',
 						type: 'string',
 						default: '',
-						required: false,
 						description: 'Searches for a scientific name from the GBIF backbone (including synonyms) using the species match service to retrieve a taxonKey. Only unique scientific names will return results, homonyms (including many monomials) will return nothing. Consider using the taxonKey parameter instead and the species match service directly.',
 					},
 					{
@@ -2522,7 +2420,6 @@ export class Gbif implements INodeType {
 						name: 'speciesKey',
 						type: 'string',
 						default: '',
-						required: false,
 						description: 'The species classification key',
 					},
 					{
@@ -2530,7 +2427,6 @@ export class Gbif implements INodeType {
 						name: 'stateProvince',
 						type: 'string',
 						default: '',
-						required: false,
 						description: 'The name of the next smaller administrative region than country (state, province, canton, department, region, etc.) in which the Location occurs',
 					},
 					{
@@ -2538,7 +2434,6 @@ export class Gbif implements INodeType {
 						name: 'subgenusKey',
 						type: 'string',
 						default: '',
-						required: false,
 						description: 'The subgenus classification key',
 					},
 					{
@@ -2546,7 +2441,6 @@ export class Gbif implements INodeType {
 						name: 'taxonKey',
 						type: 'string',
 						default: '',
-						required: false,
 						description: 'A taxon key from the GBIF backbone, including all children and synonyms of the taxon (e.g., taxonKey=212 will return all species of birds)',
 					},
 					{
@@ -2554,7 +2448,6 @@ export class Gbif implements INodeType {
 						name: 'toDate',
 						type: 'string',
 						default: '',
-						required: false,
 						description: 'End partial date of a date range in the format of yyyy-MM (e.g., 2015-11)',
 					},
 					{
@@ -2562,7 +2455,6 @@ export class Gbif implements INodeType {
 						name: 'typeStatus',
 						type: 'options',
 						default: '',
-						required: false,
 						description: 'Nomenclatural type (type status, typified scientific name, publication) applied to the subject',
 						options: [
 							{
@@ -2752,7 +2644,6 @@ export class Gbif implements INodeType {
 						name: 'verbatimScientificName',
 						type: 'string',
 						default: '',
-						required: false,
 						description: 'The scientific name provided to GBIF by the data publisher prior to interpretation and processing by GBIF',
 					},
 					{
@@ -2760,7 +2651,6 @@ export class Gbif implements INodeType {
 						name: 'verbatimTaxonId',
 						type: 'string',
 						default: '',
-						required: false,
 						description: 'The taxon identifier provided to GBIF by the data publisher',
 					},
 					{
@@ -2768,7 +2658,6 @@ export class Gbif implements INodeType {
 						name: 'waterBody',
 						type: 'string',
 						default: '',
-						required: false,
 						description: 'The name of the water body in which the Locations occurs (e.g., Lake Michigan)',
 					},
 					{
@@ -2776,7 +2665,6 @@ export class Gbif implements INodeType {
 						name: 'year',
 						type: 'string',
 						default: '',
-						required: false,
 						description: 'The 4 digit year with 98 interpreted as AD 98 (e.g., 2020,2022 for the year range 2020 through 2022, or 2020 for the exact year 2020)',
 					},
 				],
@@ -2802,8 +2690,7 @@ export class Gbif implements INodeType {
 						displayName: 'Basis of Record',
 						name: 'basisOfRecord',
 						type: 'options',
-						default: '',
-						required: false,
+						default: 'FOSSIL_SPECIMEN',
 						description: 'Filters occurrence counts by basis of record',
 						options: [
 							{
@@ -2867,15 +2754,13 @@ export class Gbif implements INodeType {
 						name: 'isGeoreferenced',
 						type: 'boolean',
 						default: false,
-						required: false,
 						description: 'Filters occurrence counts by whether they are georeferenced or not',
 					},
 					{
 						displayName: 'Issue',
 						name: 'issue',
 						type: 'multiOptions',
-						required: false,
-						default: '',
+						default: [],
 						description: 'Filter by indexing issue',
 						options: [
 							{
@@ -3019,7 +2904,7 @@ export class Gbif implements INodeType {
 								value: 'TAXONOMIC_STATUS_INVALID',
 							},
 							{
-								name: 'Taxonomic Status Mismatch ',
+								name: 'Taxonomic Status Mismatch',
 								value: 'TAXONOMIC_STATUS_MISMATCH ',
 							},
 							{
@@ -3037,7 +2922,6 @@ export class Gbif implements INodeType {
 						name: 'protocol',
 						type: 'string',
 						default: '',
-						required: false,
 						description: 'Filters occurrence counts by protocol or mechanism used to provide the occurrence record',
 					},
 					{
@@ -3059,7 +2943,6 @@ export class Gbif implements INodeType {
 						name: 'typeStatus',
 						type: 'options',
 						default: '',
-						required: false,
 						description: 'Filters occurence counts by nomenclatural type (type status, typified scientific name, publication) applied to the subject',
 						options: [
 							{
@@ -3249,7 +3132,6 @@ export class Gbif implements INodeType {
 						name: 'year',
 						type: 'string',
 						default: '',
-						required: false,
 						description: 'Filters occurrence counts by year of the occurrence',
 					},
 				],
@@ -3258,7 +3140,7 @@ export class Gbif implements INodeType {
 				displayName: 'Additional Fields',
 				name: 'limit',
 				type: 'string',
-				default: 20,
+				default: '',
 				required: true,
 				displayOptions: {
 					show: {
@@ -3297,7 +3179,6 @@ export class Gbif implements INodeType {
 						displayName: 'Dataset Key',
 						name: 'datasetKey',
 						type: 'string',
-						required: false,
 						default: '',
 						description: 'Filters by the checklist dataset key (a uuid)',
 					},
@@ -4039,15 +3920,13 @@ export class Gbif implements INodeType {
 								value: 'zu',
 							},
 						],
-						required: false,
-						default: '',
+						default: 'ab',
 						description: 'Language for vernacular names, given as an ISO 639-1 two-letter code',
 					},
 					{
 						displayName: 'Name',
 						name: 'name',
 						type: 'string',
-						required: false,
 						default: '',
 						description: 'Filters by a name string',
 					},
@@ -4055,7 +3934,6 @@ export class Gbif implements INodeType {
 						displayName: 'Source ID',
 						name: 'sourceId',
 						type: 'string',
-						required: false,
 						default: '',
 						description: 'Filters by the source identifier',
 					},
@@ -4083,7 +3961,6 @@ export class Gbif implements INodeType {
 						displayName: 'Name',
 						name: 'name',
 						type: 'string',
-						required: false,
 						default: '',
 						description: 'Filters by a name string',
 					},
@@ -4091,7 +3968,7 @@ export class Gbif implements INodeType {
 						displayName: 'Rank',
 						name: 'rank',
 						type: 'options',
-						default: '',
+						default: 'aberration',
 						options: [
 							{
 								name: 'Aberration',
@@ -4401,7 +4278,6 @@ export class Gbif implements INodeType {
 						name: 'strict',
 						type: 'boolean',
 						default: false,
-						required: false,
 						description: 'If true it (fuzzy) matches only the given name, but never a taxon in the upper classification',
 					},
 					{
@@ -4409,14 +4285,12 @@ export class Gbif implements INodeType {
 						name: 'verbose',
 						type: 'boolean',
 						default: false,
-						required: false,
 						description: 'If true it shows alternative matches which were considered but then rejected',
 					},
 					{
 						displayName: 'Kingdom',
 						name: 'kingdom',
 						type: 'string',
-						required: false,
 						default: '',
 						description: 'Optional for species match endpoint: kingdom classification accepting a canonical name',
 					},
@@ -4424,7 +4298,6 @@ export class Gbif implements INodeType {
 						displayName: 'Phylum',
 						name: 'phylum',
 						type: 'string',
-						required: false,
 						default: '',
 						description: 'Optional for species match endpoint: phylum classification accepting a canonical name',
 					},
@@ -4432,7 +4305,6 @@ export class Gbif implements INodeType {
 						displayName: 'Class',
 						name: 'class',
 						type: 'string',
-						required: false,
 						default: '',
 						description: 'Optional for species match endpoint: class classification accepting a canonical name',
 					},
@@ -4440,7 +4312,6 @@ export class Gbif implements INodeType {
 						displayName: 'Order',
 						name: 'order',
 						type: 'string',
-						required: false,
 						default: '',
 						description: 'Optional for species match endpoint: order classification accepting a canonical name',
 					},
@@ -4448,7 +4319,6 @@ export class Gbif implements INodeType {
 						displayName: 'Family',
 						name: 'family',
 						type: 'string',
-						required: false,
 						default: '',
 						description: 'Optional for species match endpoint: family classification accepting a canonical name',
 					},
@@ -4456,7 +4326,6 @@ export class Gbif implements INodeType {
 						displayName: 'Genus',
 						name: 'genus',
 						type: 'string',
-						required: false,
 						default: '',
 						description: 'Optional for species match endpoint: genus classification accepting a canonical name',
 					},
@@ -4484,7 +4353,6 @@ export class Gbif implements INodeType {
 						displayName: 'Dataset Key',
 						name: 'datasetKey',
 						type: 'string',
-						required: false,
 						default: '',
 						description: 'Filters by the checklist dataset key (a uuid)',
 					},
@@ -4492,9 +4360,7 @@ export class Gbif implements INodeType {
 						displayName: 'Facet',
 						name: 'facet',
 						type: 'multiOptions',
-						required: false,
-						default: '',
-						description: '',
+						default: [],
 						options: [
 							{
 								name: 'Constituent Key',
@@ -4571,8 +4437,7 @@ export class Gbif implements INodeType {
 								value: 'terrestrial',
 							},
 						],
-						default: '',
-						required: false,
+						default: [],
 					},
 					{
 						displayName: 'Higher Taxon Key',
@@ -4585,7 +4450,6 @@ export class Gbif implements INodeType {
 						displayName: 'Is Extinct',
 						name: 'isExtinct',
 						type: 'boolean',
-						required: false,
 						default: false,
 						description: 'Filters by extinction status',
 					},
@@ -4593,8 +4457,7 @@ export class Gbif implements INodeType {
 						displayName: 'Issue',
 						name: 'issue',
 						type: 'multiOptions',
-						required: false,
-						default: '',
+						default: [],
 						description: 'Filter by indexing issue',
 						options: [
 							{
@@ -4734,7 +4597,7 @@ export class Gbif implements INodeType {
 								value: 'taxonomic_status_invalid',
 							},
 							{
-								name: 'Taxonomic Status Mismatch ',
+								name: 'Taxonomic Status Mismatch',
 								value: 'taxonomic_status_mismatch ',
 							},
 							{
@@ -4751,8 +4614,7 @@ export class Gbif implements INodeType {
 						displayName: 'Name Type',
 						name: 'nameType',
 						type: 'multiOptions',
-						required: false,
-						default: '',
+						default: [],
 						description: 'Filters by the name type',
 						options: [
 							{
@@ -4805,8 +4667,7 @@ export class Gbif implements INodeType {
 						displayName: 'Nomenclatural Status',
 						name: 'nomenclaturalStatus',
 						type: 'multiOptions',
-						required: false,
-						default: '',
+						default: [],
 						description: 'Filter by nomenclatural status',
 						options: [
 							{
@@ -4858,7 +4719,7 @@ export class Gbif implements INodeType {
 								value: 'invalid',
 							},
 							{
-								name: 'Legitimate ',
+								name: 'Legitimate',
 								value: 'legitimate ',
 							},
 							{
@@ -4943,7 +4804,7 @@ export class Gbif implements INodeType {
 						displayName: 'Rank',
 						name: 'rank',
 						type: 'options',
-						default: '',
+						default: 'aberration',
 						options: [
 							{
 								name: 'Aberration',
@@ -5252,7 +5113,6 @@ export class Gbif implements INodeType {
 						displayName: 'Source ID',
 						name: 'sourceId',
 						type: 'string',
-						required: false,
 						default: '',
 						description: 'Filters by the source identifier',
 					},
@@ -5260,8 +5120,7 @@ export class Gbif implements INodeType {
 						displayName: 'Status',
 						name: 'status',
 						type: 'options',
-						required: false,
-						default: '',
+						default: 'accepted',
 						description: 'The taxonomic status of a taxon',
 						options: [
 							{
@@ -5298,8 +5157,7 @@ export class Gbif implements INodeType {
 						name: 'threat',
 						displayName: 'Threat',
 						type: 'multiOptions',
-						required: false,
-						default: '',
+						default: [],
 						description: 'Filter by threat status',
 						options: [
 							{
@@ -5371,7 +5229,6 @@ export class Gbif implements INodeType {
 						displayName: 'Dataset Key',
 						name: 'datasetKey',
 						type: 'string',
-						required: false,
 						default: '',
 						description: 'Filters by the checklist dataset key (a uuid)',
 					},
@@ -5379,7 +5236,7 @@ export class Gbif implements INodeType {
 						displayName: 'Rank',
 						name: 'rank',
 						type: 'options',
-						default: '',
+						default: 'aberration',
 						options: [
 							{
 								name: 'Aberration',

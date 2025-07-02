@@ -6,7 +6,7 @@ import type {
 	INodeTypeDescription,
 	IHttpRequestOptions,
 } from 'n8n-workflow';
-import { NodeConnectionType } from 'n8n-workflow';
+import { NodeConnectionTypes } from 'n8n-workflow';
 
 export class Itis implements INodeType {
 	description: INodeTypeDescription = {
@@ -18,10 +18,9 @@ export class Itis implements INodeType {
 		description: 'Authoritative taxonomic information on plants, animals, fungi, and microbes of North America and the world',
 		defaults: {
 			name: 'ITIS',
-			color: '#558594',
 		},
-		inputs: [NodeConnectionType.Main],
-		outputs: [NodeConnectionType.Main],
+		inputs: [NodeConnectionTypes.Main],
+		outputs: [NodeConnectionTypes.Main],
 		credentials: [
 		],
 		properties: [
@@ -29,6 +28,7 @@ export class Itis implements INodeType {
 				displayName: 'Resource',
 				name: 'resource',
 				type: 'options',
+				noDataExpression: true,
 				options: [
 					{
 						name: 'Metadata',
@@ -71,14 +71,14 @@ export class Itis implements INodeType {
 						value: 'vernacular',
 					},
 				],
-				default: '',
+				default: 'metadata',
 				required: true,
-				description: 'Resource to consume',
 			},
 			{
 				displayName: 'Operation',
 				name: 'operation',
 				type: 'options',
+				noDataExpression: true,
 				displayOptions: {
 					show: {
 						resource: [
@@ -100,10 +100,10 @@ export class Itis implements INodeType {
 						name: 'Get',
 						value: 'get',
 						description: 'Get a resource',
+						action: 'Get a metadata',
 					},
 				],
 				default: 'get',
-				description: 'The operation to perform.',
 			},
 			{
 				displayName: 'Query',
@@ -146,14 +146,12 @@ export class Itis implements INodeType {
 						name: 'id',
 						type: 'string',
 						default: '',
-						required: false,
 						description: 'The name usage ID',
 					},
 					{
 						displayName: 'Query',
 						name: 'q',
 						type: 'string',
-						required: false,
 						default:'',
 						description:'The name usage search query',
 					},
@@ -161,8 +159,7 @@ export class Itis implements INodeType {
 						displayName: 'Rank',
 						name: 'rank',
 						type: 'options',
-						default: '',
-						required: false,
+						default: 'DOMAIN',
 						description: 'The name usage rank',
 						options: [
 							{
@@ -566,8 +563,11 @@ export class Itis implements INodeType {
 						displayName: 'Limit',
 						name: 'limit',
 						type: 'number',
-						default: 10,
-						description: 'The result paging limit',
+						typeOptions: {
+							minValue: 1,
+						},
+						default: 50,
+						description: 'Max number of results to return',
 					},
 				],
 			},
@@ -592,8 +592,7 @@ export class Itis implements INodeType {
 						displayName: 'Content',
 						name: 'content',
 						type: 'options',
-						default: '',
-						required: false,
+						default: 'AUTHORSHIP',
 						description: 'The type of content to search',
 						options: [
 							{
@@ -610,8 +609,7 @@ export class Itis implements INodeType {
 						displayName: 'Facet',
 						name: 'facet',
 						type: 'multiOptions',
-						default: '',
-						required: false,
+						default: [],
 						description: 'The search facets',
 						options: [
 							{
@@ -717,7 +715,6 @@ export class Itis implements INodeType {
 						name: 'facetLimit',
 						type: 'number',
 						default: '',
-						required: false,
 						description: 'The search facet limit',
 					},
 					{
@@ -725,16 +722,13 @@ export class Itis implements INodeType {
 						name: 'fuzzy',
 						type: 'boolean',
 						default: false,
-						required: false,
 						description: 'Enables fuzzy search',
 					},
 					{
 						displayName: 'Minimum Rank',
 						name: 'minRank',
 						type: 'options',
-						default: '',
-						required: false,
-						description: 'The minimum rank',
+						default: 'DOMAIN',
 						options: [
 							{
 								name: 'Domain',
@@ -1130,9 +1124,7 @@ export class Itis implements INodeType {
 						displayName: 'Maximum Rank',
 						name: 'maxRank',
 						type: 'options',
-						default: '',
-						required: false,
-						description: 'The maximum rank',
+						default: 'DOMAIN',
 						options: [
 							{
 								name: 'Domain',
@@ -1529,7 +1521,6 @@ export class Itis implements INodeType {
 						name: 'reverse',
 						type: 'boolean',
 						default: false,
-						required: false,
 						description: 'Order results in reverse',
 					},
 					{
@@ -1537,7 +1528,6 @@ export class Itis implements INodeType {
 						name: 'sortBy',
 						type: 'options',
 						default: 'RELEVANCE',
-						required: false,
 						options: [
 							{
 								name: 'Name',
@@ -1561,8 +1551,7 @@ export class Itis implements INodeType {
 						displayName: 'Type',
 						name: 'type',
 						type: 'options',
-						default: '',
-						required: false,
+						default: 'EXACT',
 						description: 'The type of search',
 						options: [
 							{
@@ -1590,8 +1579,11 @@ export class Itis implements INodeType {
 						displayName: 'Limit',
 						name: 'limit',
 						type: 'number',
-						default: 10,
-						description: 'The result paging limit',
+						typeOptions: {
+							minValue: 1,
+						},
+						default: 50,
+						description: 'Max number of results to return',
 					},
 				],
 			},
@@ -1617,7 +1609,6 @@ export class Itis implements INodeType {
 						name: 'accepted',
 						type: 'boolean',
 						default: false,
-						required: false,
 						description: 'Suggest only scientific names that have an accepted taxonomic status',
 					},
 					{
@@ -1625,16 +1616,13 @@ export class Itis implements INodeType {
 						name: 'fuzzy',
 						type: 'boolean',
 						default: false,
-						required: false,
 						description: 'Enables fuzzy search',
 					},
 					{
 						displayName: 'Minimum Rank',
 						name: 'minRank',
 						type: 'options',
-						default: '',
-						required: false,
-						description: 'The minimum rank',
+						default: 'DOMAIN',
 						options: [
 							{
 								name: 'Domain',
@@ -2030,9 +2018,7 @@ export class Itis implements INodeType {
 						displayName: 'Maximum Rank',
 						name: 'maxRank',
 						type: 'options',
-						default: '',
-						required: false,
-						description: 'The maximum rank',
+						default: 'DOMAIN',
 						options: [
 							{
 								name: 'Domain',
@@ -2429,7 +2415,6 @@ export class Itis implements INodeType {
 						name: 'reverse',
 						type: 'boolean',
 						default: false,
-						required: false,
 						description: 'Order results in reverse',
 					},
 					{
@@ -2437,7 +2422,6 @@ export class Itis implements INodeType {
 						name: 'sortBy',
 						type: 'options',
 						default: 'RELEVANCE',
-						required: false,
 						options: [
 							{
 								name: 'Name',
@@ -2468,8 +2452,11 @@ export class Itis implements INodeType {
 						displayName: 'Limit',
 						name: 'limit',
 						type: 'number',
-						default: 10,
-						description: 'The result paging limit',
+						typeOptions: {
+							minValue: 1,
+						},
+						default: 50,
+						description: 'Max number of results to return',
 					},
 				],
 			},
@@ -2495,14 +2482,12 @@ export class Itis implements INodeType {
 						name: 'id',
 						type: 'string',
 						default: '',
-						required: false,
 						description: 'The ID for the reference',
 					},
 					{
 						displayName: 'Issue',
 						name: 'issue',
 						type: 'string',
-						required: false,
 						default: '',
 						description: 'Filters by reference issue: https://api.checklistbank.org/vocab/issue',
 					},
@@ -2510,7 +2495,6 @@ export class Itis implements INodeType {
 						displayName: 'Query',
 						name: 'q',
 						type: 'string',
-						required: false,
 						default:'',
 						description:'The reference search query',
 					},
@@ -2518,8 +2502,7 @@ export class Itis implements INodeType {
 						displayName: 'Sort By',
 						name: 'sortBy',
 						type: 'options',
-						default: '',
-						required: false,
+						default: 'NATIVE',
 						description: 'Sets the sorting order for references',
 						options: [
 							{
@@ -2540,7 +2523,6 @@ export class Itis implements INodeType {
 						displayName: 'Year',
 						name: 'year',
 						type: 'number',
-						required: false,
 						default: '',
 						description: 'Filters by reference year',
 					},
@@ -2555,8 +2537,11 @@ export class Itis implements INodeType {
 						displayName: 'Limit',
 						name: 'limit',
 						type: 'number',
-						default: 10,
-						description: 'The result paging limit',
+						typeOptions: {
+							minValue: 1,
+						},
+						default: 50,
+						description: 'Max number of results to return',
 					},
 				],
 			},
@@ -2582,15 +2567,13 @@ export class Itis implements INodeType {
 						name: 'children',
 						type: 'boolean',
 						default: false,
-						required: false,
 						description: 'Show the children taxa for the taxon ID',
 					},
 					{
 						displayName: 'Count By',
 						name: 'countBy',
 						type: 'options',
-						default: '',
-						required: false,
+						default: 'DOMAIN',
 						description: 'The rank to count by',
 						options: [
 							{
@@ -2988,7 +2971,6 @@ export class Itis implements INodeType {
 						name: 'extinct',
 						type: 'boolean',
 						default: false,
-						required: false,
 						description: 'Include extinct taxa',
 					},
 					{
@@ -2996,15 +2978,13 @@ export class Itis implements INodeType {
 						name: 'insertPlaceholder',
 						type: 'boolean',
 						default: false,
-						required: false,
 						description: 'Include a placeholder `Not assigned` when a name does not exist at a rank',
 					},
 					{
 						displayName: 'Type',
 						name: 'type',
 						type: 'options',
-						default: '',
-						required: false,
+						default: 'CATALOGUE',
 						options: [
 							{
 								name: 'Catalogue',
@@ -3020,7 +3000,6 @@ export class Itis implements INodeType {
 						displayName: 'ID',
 						name: 'id',
 						type: 'string',
-						required: false,
 						default: '',
 						description: 'The root ID',
 					},
@@ -3050,7 +3029,6 @@ export class Itis implements INodeType {
 						name: 'id',
 						type: 'string',
 						default: '',
-						required: false,
 						description: 'The ID for the name, taxon, or synonym',
 					},
 					{
@@ -3064,8 +3042,11 @@ export class Itis implements INodeType {
 						displayName: 'Limit',
 						name: 'limit',
 						type: 'number',
-						default: 10,
-						description: 'The result paging limit',
+						typeOptions: {
+							minValue: 1,
+						},
+						default: 50,
+						description: 'Max number of results to return',
 					},
 				],
 			},
@@ -3090,7 +3071,6 @@ export class Itis implements INodeType {
 						displayName: 'Query',
 						name: 'q',
 						type: 'string',
-						required: false,
 						default:'',
 						description:'The vernacular name search query',
 					},
@@ -3098,7 +3078,6 @@ export class Itis implements INodeType {
 						displayName: 'Language',
 						name: 'language',
 						type: 'string',
-						required: false,
 						default:'',
 						description:'The 3 letter code (ISO 639-3) for the vernacular name language: https://api.checklistbank.org/vocab/language',
 					},
@@ -3113,8 +3092,11 @@ export class Itis implements INodeType {
 						displayName: 'Limit',
 						name: 'limit',
 						type: 'number',
-						default: 10,
-						description: 'The result paging limit',
+						typeOptions: {
+							minValue: 1,
+						},
+						default: 50,
+						description: 'Max number of results to return',
 					},
 				],
 			},

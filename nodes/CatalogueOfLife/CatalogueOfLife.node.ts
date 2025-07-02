@@ -6,7 +6,7 @@ import type {
 	INodeTypeDescription,
 	IHttpRequestOptions,
 } from 'n8n-workflow';
-import { NodeConnectionType } from 'n8n-workflow';
+import { NodeConnectionTypes } from 'n8n-workflow';
 
 export class CatalogueOfLife implements INodeType {
 	description: INodeTypeDescription = {
@@ -18,10 +18,9 @@ export class CatalogueOfLife implements INodeType {
 		description: 'The most complete authoritative list of the world\'s species, maintained by hundreds of global taxonomists',
 		defaults: {
 			name: 'CatalogueOfLife',
-			color: '#1a83b1',
 		},
-		inputs: [NodeConnectionType.Main],
-		outputs: [NodeConnectionType.Main],
+		inputs: [NodeConnectionTypes.Main],
+		outputs: [NodeConnectionTypes.Main],
 		credentials: [
 		],
 		properties: [
@@ -29,6 +28,7 @@ export class CatalogueOfLife implements INodeType {
 				displayName: 'Resource',
 				name: 'resource',
 				type: 'options',
+				noDataExpression: true,
 				options: [
 					{
 						name: 'Decision',
@@ -83,14 +83,14 @@ export class CatalogueOfLife implements INodeType {
 						value: 'vernacular',
 					},
 				],
-				default: '',
+				default: 'decision',
 				required: true,
-				description: 'Resource to consume',
 			},
 			{
 				displayName: 'Operation',
 				name: 'operation',
 				type: 'options',
+				noDataExpression: true,
 				displayOptions: {
 					show: {
 						resource: [
@@ -115,16 +115,15 @@ export class CatalogueOfLife implements INodeType {
 						name: 'Get',
 						value: 'get',
 						description: 'Get a resource',
+						action: 'Get a decision',
 					},
 				],
 				default: 'get',
-				description: 'The operation to perform.',
 			},
 			{
 				displayName: 'Query',
 				name: 'q',
 				type: 'string',
-				required: false,
 				displayOptions: {
 					show: {
 						operation: [
@@ -161,7 +160,6 @@ export class CatalogueOfLife implements INodeType {
 						name: 'broken',
 						type: 'boolean',
 						default: false,
-						required: false,
 						description: 'Whether or not the decision is broken',
 					},
 					{
@@ -169,15 +167,13 @@ export class CatalogueOfLife implements INodeType {
 						name: 'id',
 						type: 'string',
 						default: '',
-						required: false,
 						description: 'The decision ID',
 					},
 					{
 						displayName: 'Mode',
 						name: 'mode',
 						type: 'options',
-						default: '',
-						required: false,
+						default: 'BLOCK',
 						description: 'The type of decision',
 						options: [
 							{
@@ -207,7 +203,6 @@ export class CatalogueOfLife implements INodeType {
 						name: 'modifiedBy',
 						type: 'number',
 						default: '',
-						required: false,
 						description: 'Filters decisions by the modified by user ID',
 					},
 					{
@@ -215,15 +210,13 @@ export class CatalogueOfLife implements INodeType {
 						name: 'name',
 						type: 'string',
 						default: '',
-						required: false,
 						description: 'Filters decisions by scientific name',
 					},
 					{
 						displayName: 'Rank',
 						name: 'rank',
 						type: 'options',
-						default: '',
-						required: false,
+						default: 'DOMAIN',
 						description: 'Filters decisions to a rank',
 						options: [
 							{
@@ -620,15 +613,13 @@ export class CatalogueOfLife implements INodeType {
 						displayName: 'Subject',
 						name: 'subject',
 						type: 'boolean',
-						default: '',
-						required: false,
+						default: false,
 					},
 					{
 						displayName: 'Subject Dataset Key',
 						name: 'subjectDatasetKey',
 						type: 'number',
 						default: '',
-						required: false,
 						description: 'The ID for the subject dataset assembled into a project',
 					},
 					{
@@ -642,8 +633,11 @@ export class CatalogueOfLife implements INodeType {
 						displayName: 'Limit',
 						name: 'limit',
 						type: 'number',
-						default: 10,
-						description: 'The result paging limit',
+						typeOptions: {
+							minValue: 1,
+						},
+						default: 50,
+						description: 'Max number of results to return',
 					},
 				],
 			},
@@ -669,7 +663,6 @@ export class CatalogueOfLife implements INodeType {
 						name: 'broken',
 						type: 'boolean',
 						default: false,
-						required: false,
 						description: 'Whether or not the estimate is broken',
 					},
 					{
@@ -677,7 +670,6 @@ export class CatalogueOfLife implements INodeType {
 						name: 'id',
 						type: 'string',
 						default: '',
-						required: false,
 						description: 'The estimate ID',
 					},
 					{
@@ -685,7 +677,6 @@ export class CatalogueOfLife implements INodeType {
 						name: 'modifiedBy',
 						type: 'number',
 						default: '',
-						required: false,
 						description: 'Filters estimates by the modified by user ID',
 					},
 					{
@@ -693,15 +684,13 @@ export class CatalogueOfLife implements INodeType {
 						name: 'name',
 						type: 'string',
 						default: '',
-						required: false,
 						description: 'Filters estimates by a scientific name',
 					},
 					{
 						displayName: 'Rank',
 						name: 'rank',
 						type: 'options',
-						default: '',
-						required: false,
+						default: 'DOMAIN',
 						description: 'Filters estimates to a rank',
 						options: [
 							{
@@ -1099,7 +1088,6 @@ export class CatalogueOfLife implements INodeType {
 						name: 'max',
 						type: 'number',
 						default: '',
-						required: false,
 						description: 'The maximum estimated number of taxa',
 					},
 					{
@@ -1107,7 +1095,6 @@ export class CatalogueOfLife implements INodeType {
 						name: 'min',
 						type: 'number',
 						default: '',
-						required: false,
 						description: 'The minimum estimated number of taxa',
 					},
 					{
@@ -1121,8 +1108,11 @@ export class CatalogueOfLife implements INodeType {
 						displayName: 'Limit',
 						name: 'limit',
 						type: 'number',
-						default: 10,
-						description: 'The result paging limit',
+						typeOptions: {
+							minValue: 1,
+						},
+						default: 50,
+						description: 'Max number of results to return',
 					},
 				],
 			},
@@ -1148,14 +1138,12 @@ export class CatalogueOfLife implements INodeType {
 						name: 'id',
 						type: 'string',
 						default: '',
-						required: false,
 						description: 'The name usage ID',
 					},
 					{
 						displayName: 'Query',
 						name: 'q',
 						type: 'string',
-						required: false,
 						default:'',
 						description:'The name usage search query',
 					},
@@ -1163,8 +1151,7 @@ export class CatalogueOfLife implements INodeType {
 						displayName: 'Rank',
 						name: 'rank',
 						type: 'options',
-						default: '',
-						required: false,
+						default: 'DOMAIN',
 						description: 'The name usage rank',
 						options: [
 							{
@@ -1568,8 +1555,11 @@ export class CatalogueOfLife implements INodeType {
 						displayName: 'Limit',
 						name: 'limit',
 						type: 'number',
-						default: 10,
-						description: 'The result paging limit',
+						typeOptions: {
+							minValue: 1,
+						},
+						default: 50,
+						description: 'Max number of results to return',
 					},
 				],
 			},
@@ -1594,8 +1584,7 @@ export class CatalogueOfLife implements INodeType {
 						displayName: 'Content',
 						name: 'content',
 						type: 'options',
-						default: '',
-						required: false,
+						default: 'AUTHORSHIP',
 						description: 'The type of content to search',
 						options: [
 							{
@@ -1612,8 +1601,7 @@ export class CatalogueOfLife implements INodeType {
 						displayName: 'Facet',
 						name: 'facet',
 						type: 'multiOptions',
-						default: '',
-						required: false,
+						default: [],
 						description: 'The search facets',
 						options: [
 							{
@@ -1719,7 +1707,6 @@ export class CatalogueOfLife implements INodeType {
 						name: 'facetLimit',
 						type: 'number',
 						default: '',
-						required: false,
 						description: 'The search facet limit',
 					},
 					{
@@ -1727,16 +1714,13 @@ export class CatalogueOfLife implements INodeType {
 						name: 'fuzzy',
 						type: 'boolean',
 						default: false,
-						required: false,
 						description: 'Enables fuzzy search',
 					},
 					{
 						displayName: 'Minimum Rank',
 						name: 'minRank',
 						type: 'options',
-						default: '',
-						required: false,
-						description: 'The minimum rank',
+						default: 'DOMAIN',
 						options: [
 							{
 								name: 'Domain',
@@ -2132,9 +2116,7 @@ export class CatalogueOfLife implements INodeType {
 						displayName: 'Maximum Rank',
 						name: 'maxRank',
 						type: 'options',
-						default: '',
-						required: false,
-						description: 'The maximum rank',
+						default: 'DOMAIN',
 						options: [
 							{
 								name: 'Domain',
@@ -2530,8 +2512,7 @@ export class CatalogueOfLife implements INodeType {
 						displayName: 'Status',
 						name: 'status',
 						type: 'options',
-						default: '',
-						required: false,
+						default: 'accepted',
 						description: 'The status of the name usage',
 						options: [
 							{
@@ -2539,15 +2520,15 @@ export class CatalogueOfLife implements INodeType {
 								value: 'accepted',
 							},
 							{
-								name: 'Ambiguous synonym',
+								name: 'Ambiguous Synonym',
 								value: 'ambiguous_synonym',
 							},
 							{
-								name: 'Misapplied name',
+								name: 'Misapplied Name',
 								value: 'misapplied_name',
 							},
 							{
-								name: 'Provisionally accepted',
+								name: 'Provisionally Accepted',
 								value: 'provisionally_accepted',
 							},
 							{
@@ -2560,8 +2541,7 @@ export class CatalogueOfLife implements INodeType {
 						displayName: 'Rank',
 						name: 'rank',
 						type: 'options',
-						default: '',
-						required: false,
+						default: 'DOMAIN',
 						description: 'The minimum rank',
 						options: [
 							{
@@ -2959,7 +2939,6 @@ export class CatalogueOfLife implements INodeType {
 						name: 'reverse',
 						type: 'boolean',
 						default: false,
-						required: false,
 						description: 'Order results in reverse',
 					},
 					{
@@ -2967,7 +2946,6 @@ export class CatalogueOfLife implements INodeType {
 						name: 'sortBy',
 						type: 'options',
 						default: 'RELEVANCE',
-						required: false,
 						options: [
 							{
 								name: 'Name',
@@ -2991,8 +2969,7 @@ export class CatalogueOfLife implements INodeType {
 						displayName: 'Type',
 						name: 'type',
 						type: 'options',
-						default: '',
-						required: false,
+						default: 'EXACT',
 						description: 'The type of search',
 						options: [
 							{
@@ -3020,8 +2997,11 @@ export class CatalogueOfLife implements INodeType {
 						displayName: 'Limit',
 						name: 'limit',
 						type: 'number',
-						default: 10,
-						description: 'The result paging limit',
+						typeOptions: {
+							minValue: 1,
+						},
+						default: 50,
+						description: 'Max number of results to return',
 					},
 				],
 			},
@@ -3047,7 +3027,6 @@ export class CatalogueOfLife implements INodeType {
 						name: 'accepted',
 						type: 'boolean',
 						default: false,
-						required: false,
 						description: 'Suggest only scientific names that have an accepted taxonomic status',
 					},
 					{
@@ -3055,16 +3034,13 @@ export class CatalogueOfLife implements INodeType {
 						name: 'fuzzy',
 						type: 'boolean',
 						default: false,
-						required: false,
 						description: 'Enables fuzzy search',
 					},
 					{
 						displayName: 'Minimum Rank',
 						name: 'minRank',
 						type: 'options',
-						default: '',
-						required: false,
-						description: 'The minimum rank',
+						default: 'DOMAIN',
 						options: [
 							{
 								name: 'Domain',
@@ -3460,9 +3436,7 @@ export class CatalogueOfLife implements INodeType {
 						displayName: 'Maximum Rank',
 						name: 'maxRank',
 						type: 'options',
-						default: '',
-						required: false,
-						description: 'The maximum rank',
+						default: 'DOMAIN',
 						options: [
 							{
 								name: 'Domain',
@@ -3859,7 +3833,6 @@ export class CatalogueOfLife implements INodeType {
 						name: 'reverse',
 						type: 'boolean',
 						default: false,
-						required: false,
 						description: 'Order results in reverse',
 					},
 					{
@@ -3867,7 +3840,6 @@ export class CatalogueOfLife implements INodeType {
 						name: 'sortBy',
 						type: 'options',
 						default: 'RELEVANCE',
-						required: false,
 						options: [
 							{
 								name: 'Name',
@@ -3898,8 +3870,11 @@ export class CatalogueOfLife implements INodeType {
 						displayName: 'Limit',
 						name: 'limit',
 						type: 'number',
-						default: 10,
-						description: 'The result paging limit',
+						typeOptions: {
+							minValue: 1,
+						},
+						default: 50,
+						description: 'Max number of results to return',
 					},
 				],
 			},
@@ -3925,14 +3900,12 @@ export class CatalogueOfLife implements INodeType {
 						name: 'id',
 						type: 'string',
 						default: '',
-						required: false,
 						description: 'The ID for the reference',
 					},
 					{
 						displayName: 'Issue',
 						name: 'issue',
 						type: 'string',
-						required: false,
 						default: '',
 						description: 'Filters by reference issue: https://api.checklistbank.org/vocab/issue',
 					},
@@ -3940,7 +3913,6 @@ export class CatalogueOfLife implements INodeType {
 						displayName: 'Query',
 						name: 'q',
 						type: 'string',
-						required: false,
 						default:'',
 						description:'The reference search query',
 					},
@@ -3948,8 +3920,7 @@ export class CatalogueOfLife implements INodeType {
 						displayName: 'Sort By',
 						name: 'sortBy',
 						type: 'options',
-						default: '',
-						required: false,
+						default: 'NATIVE',
 						description: 'Sets the sorting order for references',
 						options: [
 							{
@@ -3970,7 +3941,6 @@ export class CatalogueOfLife implements INodeType {
 						displayName: 'Year',
 						name: 'year',
 						type: 'number',
-						required: false,
 						default: '',
 						description: 'Filters by reference year',
 					},
@@ -3985,8 +3955,11 @@ export class CatalogueOfLife implements INodeType {
 						displayName: 'Limit',
 						name: 'limit',
 						type: 'number',
-						default: 10,
-						description: 'The result paging limit',
+						typeOptions: {
+							minValue: 1,
+						},
+						default: 50,
+						description: 'Max number of results to return',
 					},
 				],
 			},
@@ -4012,13 +3985,11 @@ export class CatalogueOfLife implements INodeType {
 						name: 'notCurrentOnly',
 						type: 'boolean',
 						default: false,
-						required: false,
 					},
 					{
 						displayName: 'ID',
 						name: 'id',
 						type: 'string',
-						required: false,
 						default: '',
 						description: 'The source dataset ID',
 					},
@@ -4046,15 +4017,13 @@ export class CatalogueOfLife implements INodeType {
 						name: 'children',
 						type: 'boolean',
 						default: false,
-						required: false,
 						description: 'Show the children taxa for the taxon ID',
 					},
 					{
 						displayName: 'Count By',
 						name: 'countBy',
 						type: 'options',
-						default: '',
-						required: false,
+						default: 'DOMAIN',
 						description: 'The rank to count by',
 						options: [
 							{
@@ -4452,7 +4421,6 @@ export class CatalogueOfLife implements INodeType {
 						name: 'extinct',
 						type: 'boolean',
 						default: false,
-						required: false,
 						description: 'Include extinct taxa',
 					},
 					{
@@ -4460,15 +4428,13 @@ export class CatalogueOfLife implements INodeType {
 						name: 'insertPlaceholder',
 						type: 'boolean',
 						default: false,
-						required: false,
 						description: 'Include a placeholder `Not assigned` when a name does not exist at a rank',
 					},
 					{
 						displayName: 'Type',
 						name: 'type',
 						type: 'options',
-						default: '',
-						required: false,
+						default: 'CATALOGUE',
 						options: [
 							{
 								name: 'Catalogue',
@@ -4484,7 +4450,6 @@ export class CatalogueOfLife implements INodeType {
 						displayName: 'ID',
 						name: 'id',
 						type: 'string',
-						required: false,
 						default: '',
 						description: 'The root ID',
 					},
@@ -4514,7 +4479,6 @@ export class CatalogueOfLife implements INodeType {
 						name: 'id',
 						type: 'string',
 						default: '',
-						required: false,
 						description: 'The ID for the name, taxon, or synonym',
 					},
 					{
@@ -4528,8 +4492,11 @@ export class CatalogueOfLife implements INodeType {
 						displayName: 'Limit',
 						name: 'limit',
 						type: 'number',
-						default: 10,
-						description: 'The result paging limit',
+						typeOptions: {
+							minValue: 1,
+						},
+						default: 50,
+						description: 'Max number of results to return',
 					},
 				],
 			},
@@ -4554,7 +4521,6 @@ export class CatalogueOfLife implements INodeType {
 						displayName: 'Query',
 						name: 'q',
 						type: 'string',
-						required: false,
 						default:'',
 						description:'The vernacular name search query',
 					},
@@ -4562,7 +4528,6 @@ export class CatalogueOfLife implements INodeType {
 						displayName: 'Language',
 						name: 'language',
 						type: 'string',
-						required: false,
 						default:'',
 						description:'The 3 letter code (ISO 639-3) for the vernacular name language: https://api.checklistbank.org/vocab/language',
 					},
@@ -4577,8 +4542,11 @@ export class CatalogueOfLife implements INodeType {
 						displayName: 'Limit',
 						name: 'limit',
 						type: 'number',
-						default: 10,
-						description: 'The result paging limit',
+						typeOptions: {
+							minValue: 1,
+						},
+						default: 50,
+						description: 'Max number of results to return',
 					},
 				],
 			},

@@ -6,7 +6,7 @@ import type {
 	INodeTypeDescription,
 	IHttpRequestOptions,
 } from 'n8n-workflow';
-import { NodeConnectionType } from 'n8n-workflow';
+import { NodeConnectionTypes } from 'n8n-workflow';
 
 export class Bionomia implements INodeType {
 	description: INodeTypeDescription = {
@@ -18,10 +18,9 @@ export class Bionomia implements INodeType {
 		description: 'Link natural history specimens to the world\'s collectors',
 		defaults: {
 			name: 'Bionomia',
-			color: '#012429',
 		},
-		inputs: [NodeConnectionType.Main],
-		outputs: [NodeConnectionType.Main],
+		inputs: [NodeConnectionTypes.Main],
+		outputs: [NodeConnectionTypes.Main],
 		credentials: [
 		],
 		properties: [
@@ -29,6 +28,7 @@ export class Bionomia implements INodeType {
 				displayName: 'Resource',
 				name: 'resource',
 				type: 'options',
+				noDataExpression: true,
 				options: [
 					{
 						name: 'Occurrence',
@@ -43,7 +43,7 @@ export class Bionomia implements INodeType {
 						value: 'parse',
 					},
 					{
-						name: 'People',
+						name: 'Person',
 						value: 'people',
 					},
 					{
@@ -51,18 +51,18 @@ export class Bionomia implements INodeType {
 						value: 'peopleSearch',
 					},
 					{
-						name: 'Specimens',
+						name: 'Speciman',
 						value: 'specimens',
 					},
 				],
 				default: 'parse',
 				required: true,
-				description: 'Resource to consume',
 			},
 			{
 				displayName: 'Operation',
 				name: 'operation',
 				type: 'options',
+				noDataExpression: true,
 				displayOptions: {
 					show: {
 						resource: [
@@ -80,10 +80,10 @@ export class Bionomia implements INodeType {
 						name: 'Get',
 						value: 'get',
 						description: 'Get a parsed human name',
+						action: 'Get an occurrence',
 					},
 				],
 				default: 'get',
-				description: 'The operation to perform.',
 			},
 			{
 				displayName: 'ID',
@@ -123,7 +123,7 @@ export class Bionomia implements INodeType {
 				description:'The occurrence ID provided by the Global Biodiversity Information Facility (GBIF)',
 			},
 			{
-				displayName: 'Human name',
+				displayName: 'Human Name',
 				name: 'name',
 				type: 'string',
 				required: true,
@@ -144,7 +144,6 @@ export class Bionomia implements INodeType {
 				displayName: 'Query',
 				name: 'q',
 				type: 'string',
-				required: false,
 				displayOptions: {
 					show: {
 						operation: [
@@ -250,8 +249,11 @@ export class Bionomia implements INodeType {
 						displayName: 'Limit',
 						name: 'limit',
 						type: 'number',
-						default: 30,
-						description: 'The number of results to return per page',
+						typeOptions: {
+							minValue: 1,
+						},
+						default: 50,
+						description: 'Max number of results to return',
 					},
 				],
 			},

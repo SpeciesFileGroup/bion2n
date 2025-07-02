@@ -6,7 +6,7 @@ import type {
 	INodeTypeDescription,
 	IHttpRequestOptions,
 } from 'n8n-workflow';
-import { NodeConnectionType } from 'n8n-workflow';
+import { NodeConnectionTypes } from 'n8n-workflow';
 
 function setUrlParameters(parameter: string, values: string, urlParams= ''): string {
 	values.split(',').forEach((value: string) => {
@@ -34,10 +34,9 @@ export class TaxonWorks implements INodeType {
 		description: 'TaxonWorks is an integrated web-based workbench for taxonomists and biodiversity scientists',
 		defaults: {
 			name: 'TaxonWorks',
-			color: '#00cc92',
 		},
-		inputs: [NodeConnectionType.Main],
-		outputs: [NodeConnectionType.Main],
+		inputs: [NodeConnectionTypes.Main],
+		outputs: [NodeConnectionTypes.Main],
 		credentials: [
 			{
 				name: 'taxonWorksUserApi',
@@ -53,45 +52,46 @@ export class TaxonWorks implements INodeType {
 				displayName: 'Resource',
 				name: 'resource',
 				type: 'options',
+				noDataExpression: true,
 				options: [
 					{
-						name: 'Asserted Distributions',
+						name: 'Asserted Distribution',
 						value: 'assertedDistributions',
 					},
 					{
-						name: 'Biological Associations',
+						name: 'Biological Association',
 						value: 'biologicalAssociation',
 					},
 					{
-						name: 'Citations',
+						name: 'Citation',
 						value: 'citations',
 					},
 					{
-						name: 'Collecting Events',
+						name: 'Collecting Event',
 						value: 'collectingEvents',
 					},
 					{
-						name: 'Collection Objects',
+						name: 'Collection Object',
 						value: 'collectionObjects',
 					},
 					{
-						name: 'Contents',
+						name: 'Content',
 						value: 'contents',
 					},
 					{
-						name: 'Data Attributes',
+						name: 'Data Attribute',
 						value: 'dataAttributes',
 					},
 					{
-						name: 'Downloads',
+						name: 'Download',
 						value: 'downloads',
 					},
 					{
-						name: 'Identifiers',
+						name: 'Identifier',
 						value: 'identifiers',
 					},
 					{
-						name: 'Images',
+						name: 'Image',
 						value: 'images',
 					},
 					{
@@ -137,12 +137,12 @@ export class TaxonWorks implements INodeType {
 				],
 				default: 'taxonNames',
 				required: true,
-				description: 'Resource to consume',
 			},
 			{
 				displayName: 'Operation',
 				name: 'operation',
 				type: 'options',
+				noDataExpression: true,
 				displayOptions: {
 					show: {
 						resource: [
@@ -174,10 +174,10 @@ export class TaxonWorks implements INodeType {
 						name: 'Get',
 						value: 'get',
 						description: 'Get resource',
+						action: 'Get an asserted distributions',
 					},
 				],
 				default: 'get',
-				description: 'The operation to perform.',
 			},
 			{
 				displayName: 'Server',
@@ -220,19 +220,19 @@ export class TaxonWorks implements INodeType {
 						displayName: 'Recent',
 						name: 'recent',
 						type: 'boolean',
-						default: '',
+						default: false,
 					},
 					{
 						displayName: 'Page',
 						name: 'page',
 						type: 'number',
-						default: '0',
+						default: 0,
 					},
 					{
 						displayName: 'Per',
 						name: 'per',
 						type: 'number',
-						default: '100',
+						default: 0,
 					},
 				],
 			},
@@ -293,13 +293,13 @@ export class TaxonWorks implements INodeType {
 						displayName: 'Page',
 						name: 'page',
 						type: 'number',
-						default: '0',
+						default: 0,
 					},
 					{
 						displayName: 'Per',
 						name: 'per',
 						type: 'number',
-						default: '100',
+						default: 0,
 					},
 				],
 			},
@@ -336,7 +336,7 @@ export class TaxonWorks implements INodeType {
 						displayName: 'Citation Object Type',
 						name: 'citationObjectType',
 						type: 'options',
-						default: '',
+						default: 'AssertedDistribution',
 						options: [
 							{
 								name: 'Asserted Distribution',
@@ -410,13 +410,13 @@ export class TaxonWorks implements INodeType {
 						displayName: 'Page',
 						name: 'page',
 						type: 'number',
-						default: '0',
+						default: 0,
 					},
 					{
 						displayName: 'Per',
 						name: 'per',
 						type: 'number',
-						default: '100',
+						default: 0,
 					},
 				],
 			},
@@ -442,7 +442,6 @@ export class TaxonWorks implements INodeType {
 						name: 'collectingEventsWildcards',
 						type: 'string',
 						default: '',
-						description: '',
 					},
 					{
 						displayName: 'Collector IDs',
@@ -454,7 +453,7 @@ export class TaxonWorks implements INodeType {
 						displayName: 'Collector IDs Or',
 						name: 'collectorIdsOr',
 						type: 'boolean',
-						default: '',
+						default: false,
 						description: 'Find collecting events with ANY one of these collectors (true) or ALL of these collectors (false)',
 					},
 					{
@@ -462,7 +461,7 @@ export class TaxonWorks implements INodeType {
 						name: 'geoJson',
 						type: 'string',
 						default: '',
-						description: 'geoJSON of the search area. For example, try:\n\n {"type":"Polygon","coordinates":[[[-89.41223144531249,39.86231722624386],[-87.835693359375,39.86231722624386],[-87.835693359375,40.74621655456364],[-89.41223144531249,40.74621655456364],[-89.41223144531249,39.86231722624386]]]}',
+						description: 'GeoJSON of the search area. For example, try: {"type":"Polygon","coordinates":[[[-89.41223144531249,39.86231722624386],[-87.835693359375,39.86231722624386],[-87.835693359375,40.74621655456364],[-89.41223144531249,40.74621655456364],[-89.41223144531249,39.86231722624386]]]}.',
 					},
 					{
 						displayName: 'Geographic Area IDs',
@@ -497,7 +496,7 @@ export class TaxonWorks implements INodeType {
 						name: 'keywordIdOr',
 						type: 'string',
 						default: '',
-						description: 'List of keyword IDs for associated collecting events where any of the enumerated keywords are present.',
+						description: 'List of keyword IDs for associated collecting events where any of the enumerated keywords are present',
 					},
 					{
 						displayName: 'MD5 Verbatim Labels',
@@ -536,7 +535,7 @@ export class TaxonWorks implements INodeType {
 						displayName: 'Spatial Geographic Areas',
 						name: 'spatialGeographicAreas',
 						type: 'boolean',
-						default: '',
+						default: false,
 						description: 'Find CollectingEvents having spatial geographic areas',
 					},
 					{
@@ -550,13 +549,13 @@ export class TaxonWorks implements INodeType {
 						displayName: 'Page',
 						name: 'page',
 						type: 'number',
-						default: '0',
+						default: 0,
 					},
 					{
 						displayName: 'Per',
 						name: 'per',
 						type: 'number',
-						default: '100',
+						default: 0,
 					},
 				],
 			},
@@ -630,7 +629,7 @@ export class TaxonWorks implements INodeType {
 						displayName: 'Collecting Event',
 						name: 'collectingEvent',
 						type: 'boolean',
-						default: '',
+						default: false,
 					},
 					{
 						displayName: 'Collecting Event IDs',
@@ -657,21 +656,21 @@ export class TaxonWorks implements INodeType {
 						displayName: 'Collector IDs Or',
 						name: 'collectorIdsOr',
 						type: 'boolean',
-						default: '',
+						default: false,
 						description: 'IDs for any of the collectors are to be included in the search',
 					},
 					{
 						displayName: 'Current Determinations',
 						name: 'currentDeterminations',
 						type: 'boolean',
-						default: '',
+						default: false,
 						description: 'Include metadata for current determinations',
 					},
 					{
 						displayName: 'Depictions',
 						name: 'depictions',
 						type: 'boolean',
-						default: '',
+						default: false,
 						description: 'Include metadata for depicted objects',
 					},
 					{
@@ -685,14 +684,14 @@ export class TaxonWorks implements INodeType {
 						displayName: 'Determiner IDs Or',
 						name: 'determinerIdsOr',
 						type: 'boolean',
-						default: '',
+						default: false,
 						description: 'Include results from any of the determiner IDs',
 					},
 					{
 						displayName: 'Darwin Core Indexed',
 						name: 'determinerIds',
 						type: 'boolean',
-						default: '',
+						default: false,
 						description: 'Include metadata for Darwin Core indexed objects',
 					},
 					{
@@ -728,14 +727,14 @@ export class TaxonWorks implements INodeType {
 						name: 'geoJson',
 						type: 'string',
 						default: '',
-						description: 'geoJSON of the search area. For example, try:\n\n {"type":"Polygon","coordinates":[[[-89.41223144531249,39.86231722624386],[-87.835693359375,39.86231722624386],[-87.835693359375,40.74621655456364],[-89.41223144531249,40.74621655456364],[-89.41223144531249,39.86231722624386]]]}',
+						description: 'GeoJSON of the search area. For example, try: {"type":"Polygon","coordinates":[[[-89.41223144531249,39.86231722624386],[-87.835693359375,39.86231722624386],[-87.835693359375,40.74621655456364],[-89.41223144531249,40.74621655456364],[-89.41223144531249,39.86231722624386]]]}.',
 					},
 					{
 						displayName: 'Geographic Area',
 						name: 'geographicArea',
 						type: 'boolean',
-						default: '',
-						description: 'Find if associated collecting event has a geographic area. Ignored if param not present',
+						default: false,
+						description: 'Find if associated collecting event has a geographic area. Ignored if param not present.',
 					},
 					{
 						displayName: 'Geographic Area IDs',
@@ -748,7 +747,7 @@ export class TaxonWorks implements INodeType {
 						displayName: 'Georeferences',
 						name: 'georeferences',
 						type: 'boolean',
-						default: '',
+						default: false,
 						description: 'Include metadata for associated collecting event georeferences',
 					},
 					{
@@ -783,21 +782,21 @@ export class TaxonWorks implements INodeType {
 						displayName: 'Identifiers',
 						name: 'identifiers',
 						type: 'boolean',
-						default: '',
+						default: false,
 						description: 'Include metadata for associated collecting event identifiers',
 					},
 					{
 						displayName: 'In Labels',
 						name: 'inLabels',
 						type: 'boolean',
-						default: '',
+						default: false,
 						description: 'Search wildcard in all related collecting event labels',
 					},
 					{
 						displayName: 'In Verbatim Locality',
 						name: 'inVerbatimLocality',
 						type: 'boolean',
-						default: '',
+						default: false,
 						description: 'Search in verbatim locality in related collecting events',
 					},
 					{
@@ -825,7 +824,7 @@ export class TaxonWorks implements INodeType {
 						displayName: 'Loaned',
 						name: 'loaned',
 						type: 'boolean',
-						default: '',
+						default: false,
 						description: 'Include metadata for loaned (borrowed) objects',
 					},
 					{
@@ -846,14 +845,14 @@ export class TaxonWorks implements INodeType {
 						displayName: 'Never Loaned',
 						name: 'neverLoaned',
 						type: 'boolean',
-						default: '',
+						default: false,
 						description: 'Include metadata for collection objects never loaned',
 					},
 					{
 						displayName: 'On Loan',
 						name: 'onLoan',
 						type: 'boolean',
-						default: '',
+						default: false,
 						description: 'Include metadata for collection objects on loan',
 					},
 					{
@@ -866,7 +865,7 @@ export class TaxonWorks implements INodeType {
 						displayName: 'Partial Overlap Dates',
 						name: 'partialOverlapDates',
 						type: 'boolean',
-						default: '',
+						default: false,
 						description: 'Allow date overlaps',
 					},
 					{
@@ -894,7 +893,7 @@ export class TaxonWorks implements INodeType {
 						displayName: 'Repository',
 						name: 'repository',
 						type: 'boolean',   // TODO: TW doc wrong on type?
-						default: '',
+						default: false,
 						description: 'Include metadata for repository',
 					},
 					{
@@ -915,7 +914,7 @@ export class TaxonWorks implements INodeType {
 						displayName: 'Spatial Geographic Areas',
 						name: 'spatialGeographicAreas',
 						type: 'boolean',
-						default: '',
+						default: false,
 						description: 'Find if associated collecting event has a geographic area. Ignored if param not present.',
 					},
 					{
@@ -929,14 +928,14 @@ export class TaxonWorks implements INodeType {
 						displayName: 'Taxon Determinations',
 						name: 'taxonDeterminations',
 						type: 'boolean',
-						default: '',
+						default: false,
 						description: 'Include taxon determinations',
 					},
 					{
 						displayName: 'Type Material',
 						name: 'typeMaterial',
 						type: 'boolean',
-						default: '',
+						default: false,
 						description: 'Include type material',
 					},
 					{
@@ -971,7 +970,7 @@ export class TaxonWorks implements INodeType {
 						displayName: 'User Target',
 						name: 'userTarget',
 						type: 'options',
-						default: '',
+						default: 'created',
 						options: [
 							{
 								name: 'Created',
@@ -988,28 +987,28 @@ export class TaxonWorks implements INodeType {
 						displayName: 'Validity',
 						name: 'validity',
 						type: 'boolean',
-						default: '',
+						default: false,
 						description: 'Include metadata for valid. Used only in conjunction with ancestor_id.',
 					},
 					{
 						displayName: 'With Buffered Collecting Event',
 						name: 'withBufferedCollectingEvent',
 						type: 'boolean',
-						default: '',
+						default: false,
 						description: 'Return collection object with buffered collecting event',
 					},
 					{
 						displayName: 'With Buffered Determinations',
 						name: 'withBufferedDeterminations',
 						type: 'boolean',
-						default: '',
+						default: false,
 						description: 'Return collection object with buffered determinations',
 					},
 					{
 						displayName: 'With Buffered Other Labels',
 						name: 'withBufferedOtherLabels',
 						type: 'boolean',
-						default: '',
+						default: false,
 						description: 'Return collection object with buffered other labels',
 					},
 					{
@@ -1023,13 +1022,13 @@ export class TaxonWorks implements INodeType {
 						displayName: 'Page',
 						name: 'page',
 						type: 'number',
-						default: '0',
+						default: 0,
 					},
 					{
 						displayName: 'Per',
 						name: 'per',
 						type: 'number',
-						default: '100',
+						default: 0,
 					},
 				],
 			},
@@ -1060,19 +1059,19 @@ export class TaxonWorks implements INodeType {
 						displayName: 'Citations',
 						name: 'citations',
 						type: 'boolean',
-						default: 'false',
+						default: false,
 					},
 					{
 						displayName: 'Depictions',
 						name: 'depictions',
 						type: 'boolean',
-						default: 'false',
+						default: false,
 					},
 					{
 						displayName: 'Exact',
 						name: 'exact',
 						type: 'boolean',
-						default: 'false',
+						default: false,
 					},
 					{
 						displayName: 'OTU ID',
@@ -1133,13 +1132,13 @@ export class TaxonWorks implements INodeType {
 						displayName: 'Page',
 						name: 'page',
 						type: 'number',
-						default: '0',
+						default: 0,
 					},
 					{
 						displayName: 'Per',
 						name: 'per',
 						type: 'number',
-						default: '100',
+						default: 0,
 					},
 				],
 			},
@@ -1164,13 +1163,13 @@ export class TaxonWorks implements INodeType {
 						displayName: 'Page',
 						name: 'page',
 						type: 'number',
-						default: '0',
+						default: 0,
 					},
 					{
 						displayName: 'Per',
 						name: 'per',
 						type: 'number',
-						default: '100',
+						default: 0,
 					},
 				],
 			},
@@ -1192,7 +1191,7 @@ export class TaxonWorks implements INodeType {
 				},
 				options: [
 					{
-						name: 'id',
+						name: 'ID',
 						value: '',
 						type: 'string',
 						default: '',
@@ -1270,13 +1269,13 @@ export class TaxonWorks implements INodeType {
 						displayName: 'Page',
 						name: 'page',
 						type: 'number',
-						default: '0',
+						default: 0,
 					},
 					{
 						displayName: 'Per',
 						name: 'per',
 						type: 'number',
-						default: '100',
+						default: 0,
 					},
 				],
 			},
@@ -1640,7 +1639,7 @@ export class TaxonWorks implements INodeType {
 								value: 'User',
 							},
 						],
-						default: '',
+						default: [],
 						description: 'Object type for the note',
 					},
 					{
@@ -1661,13 +1660,13 @@ export class TaxonWorks implements INodeType {
 						displayName: 'Page',
 						name: 'page',
 						type: 'number',
-						default: '0',
+						default: 0,
 					},
 					{
 						displayName: 'Per',
 						name: 'per',
 						type: 'number',
-						default: '100',
+						default: 0,
 					},
 				],
 			},
@@ -1707,7 +1706,7 @@ export class TaxonWorks implements INodeType {
 						name: 'observationObjectGlobalId',
 						type: 'string',
 						default: '',
-						description: 'Identifier for the observation object global ID for which the observation was made.',
+						description: 'Identifier for the observation object global ID for which the observation was made',
 					},
 					{
 						displayName: 'OTU ID',
@@ -1720,13 +1719,13 @@ export class TaxonWorks implements INodeType {
 						displayName: 'Page',
 						name: 'page',
 						type: 'number',
-						default: '0',
+						default: 0,
 					},
 					{
 						displayName: 'Per',
 						name: 'per',
 						type: 'number',
-						default: '100',
+						default: 0,
 					},
 				],
 			},
@@ -1764,13 +1763,13 @@ export class TaxonWorks implements INodeType {
 						displayName: 'Page',
 						name: 'page',
 						type: 'number',
-						default: '0',
+						default: 0,
 					},
 					{
 						displayName: 'Per',
 						name: 'per',
 						type: 'number',
-						default: '100',
+						default: 0,
 					},
 				],
 			},
@@ -1848,13 +1847,13 @@ export class TaxonWorks implements INodeType {
 						displayName: 'Page',
 						name: 'page',
 						type: 'number',
-						default: '0',
+						default: 0,
 					},
 					{
 						displayName: 'Per',
 						name: 'per',
 						type: 'number',
-						default: '100',
+						default: 0,
 					},
 				],
 			},
@@ -1945,7 +1944,7 @@ export class TaxonWorks implements INodeType {
 						displayName: 'Role',
 						name: 'role',
 						type: 'multiOptions',
-						default: '',
+						default: [],
 						options: [
 							{
 								name: 'Accession Provider',
@@ -2027,13 +2026,13 @@ export class TaxonWorks implements INodeType {
 						displayName: 'Page',
 						name: 'page',
 						type: 'number',
-						default: '0',
+						default: 0,
 					},
 					{
 						displayName: 'Per',
 						name: 'per',
 						type: 'number',
-						default: '100',
+						default: 0,
 					},
 				],
 			},
@@ -2134,7 +2133,7 @@ export class TaxonWorks implements INodeType {
 						displayName: 'In Project',
 						name: 'inProject',
 						type: 'boolean',
-						default: '',
+						default: false,
 					},
 					{
 						displayName: 'Keyword ID And',
@@ -2152,7 +2151,7 @@ export class TaxonWorks implements INodeType {
 						displayName: 'Nomenclature',
 						name: 'nomenclature',
 						type: 'boolean',
-						default: '',
+						default: false,
 					},
 					{
 						displayName: 'Notes',
@@ -2170,7 +2169,7 @@ export class TaxonWorks implements INodeType {
 						displayName: 'Recent',
 						name: 'recent',
 						type: 'boolean',
-						default: '',
+						default: false,
 					},
 					{
 						displayName: 'Roles',
@@ -2182,7 +2181,7 @@ export class TaxonWorks implements INodeType {
 						displayName: 'Source Type',
 						name: 'sourceType',
 						type: 'options',
-						default: '',
+						default: 'Source::Bibtex',
 						options: [
 							{
 								name: 'BibTex',
@@ -2197,7 +2196,6 @@ export class TaxonWorks implements INodeType {
 								value: 'Source::Verbatim',
 							},
 						],
-						description: '',
 					},
 					{
 						displayName: 'Title',
@@ -2215,7 +2213,7 @@ export class TaxonWorks implements INodeType {
 						displayName: 'With DOI',
 						name: 'withDoi',
 						type: 'boolean',
-						default: '',
+						default: false,
 					},
 					{
 						displayName: 'User Date Start',
@@ -2245,13 +2243,13 @@ export class TaxonWorks implements INodeType {
 						displayName: 'Page',
 						name: 'page',
 						type: 'number',
-						default: '0',
+						default: 0,
 					},
 					{
 						displayName: 'Per',
 						name: 'per',
 						type: 'number',
-						default: '100',
+						default: 0,
 					},
 				],
 			},
@@ -2805,7 +2803,7 @@ export class TaxonWorks implements INodeType {
 								value: 'TaxonNameClassification::Latinized::PartOfSpeech::Participle',
 							},
 						],
-						default: '',
+						default: [],
 					},
 					{
 						displayName: 'Taxon Name Classification Set',
@@ -2825,19 +2823,19 @@ export class TaxonWorks implements INodeType {
 								value: 'validating',
 							},
 						],
-						default: '',
+						default: [],
 					},
 					{
 						displayName: 'Page',
 						name: 'page',
 						type: 'number',
-						default: '0',
+						default: 0,
 					},
 					{
 						displayName: 'Per',
 						name: 'per',
 						type: 'number',
-						default: '100',
+						default: 0,
 					},
 				],
 			},
@@ -2897,64 +2895,64 @@ export class TaxonWorks implements INodeType {
 								value: 'validating',
 							},
 						],
-						default: '',
+						default: [],
 					},
 					{
 						displayName: 'Taxon Name Relationship Type',
 						name: 'taxonNameRelationshipType',
 						type: 'multiOptions',
-						default: '',
+						default: [],
 						options: [
 							{
-								name: 'ICZN unavailable or invalid, linked to',
+								name: 'ICZN Unavailable or Invalid, Linked To',
 								value: 'TaxonNameRelationship::Iczn::Invalidating',
 							},
 							{
-								name: 'ICZN homonym of',
+								name: 'ICZN Homonym Of',
 								value: 'TaxonNameRelationship::Iczn::Invalidating::Homonym',
 							},
 							{
-								name: 'ICZN primary homonym of',
+								name: 'ICZN Primary Homonym Of',
 								value: 'TaxonNameRelationship::Iczn::Invalidating::Homonym::Primary',
 							},
 							{
-								name: 'ICZN forgotten primary homonym of',
+								name: 'ICZN Forgotten Primary Homonym Of',
 								value: 'TaxonNameRelationship::Iczn::Invalidating::Homonym::Primary::Forgotten',
 							},
 							{
-								name: 'ICZN suppressed primary homonym of',
+								name: 'ICZN Suppressed Primary Homonym Of',
 								value: 'TaxonNameRelationship::Iczn::Invalidating::Homonym::Primary::Suppressed',
 							},
 							{
-								name: 'ICZN secondary homonym of',
+								name: 'ICZN Secondary Homonym Of',
 								value: 'TaxonNameRelationship::Iczn::Invalidating::Homonym::Secondary',
 							},
 							{
-								name: 'ICZN secondary homonym replaced before 1961 of',
+								name: 'ICZN Secondary Homonym Replaced Before 1961 Of',
 								value: 'TaxonNameRelationship::Iczn::Invalidating::Homonym::Secondary::Secondary1961',
 							},
 							{
-								name: 'ICZN misapplication, linked to',
+								name: 'ICZN Misapplication, Linked To',
 								value: 'TaxonNameRelationship::Iczn::Invalidating::Misapplication',
 							},
 							{
-								name: 'ICZN synonym of',
+								name: 'ICZN Synonym Of',
 								value: 'TaxonNameRelationship::Iczn::Invalidating::Synonym',
 							},
 							{
-								name: 'ICZN nomen oblitum of',
+								name: 'ICZN Nomen Oblitum Of',
 								value: 'TaxonNameRelationship::Iczn::Invalidating::Synonym::ForgottenName',
 							},
 							{
-								name: 'ICZN objective synonym of',
+								name: 'ICZN Objective Synonym Of',
 								value: 'TaxonNameRelationship::Iczn::Invalidating::Synonym::Objective',
 							},
 							{
-								name: 'ICZN replaced by',
+								name: 'ICZN Replaced By',
 								value: 'TaxonNameRelationship::Iczn::Invalidating::Synonym::Objective::ReplacedHomonym',
 							},
 							{
-								name: 'ICZN synonymic homonym of',
+								name: 'ICZN Synonymic Homonym Of',
 								value: 'TaxonNameRelationship::Iczn::Invalidating::Synonym::Objective::SynonymicHomonym',
 							},
 							{
@@ -2966,43 +2964,43 @@ export class TaxonWorks implements INodeType {
 								value: 'TaxonNameRelationship::Iczn::Invalidating::Synonym::Objective::UnnecessaryReplacementName',
 							},
 							{
-								name: 'ICZN subjective synonym of',
+								name: 'ICZN Subjective Synonym Of',
 								value: 'TaxonNameRelationship::Iczn::Invalidating::Synonym::Subjective',
 							},
 							{
-								name: 'ICZN suppressed under',
+								name: 'ICZN Suppressed Under',
 								value: 'TaxonNameRelationship::Iczn::Invalidating::Synonym::Suppression',
 							},
 							{
-								name: 'ICZN conditionaly suppressed under',
+								name: 'ICZN Conditionaly Suppressed Under',
 								value: 'TaxonNameRelationship::Iczn::Invalidating::Synonym::Suppression::Conditional',
 							},
 							{
-								name: 'ICZN partially suppressed under',
+								name: 'ICZN Partially Suppressed Under',
 								value: 'TaxonNameRelationship::Iczn::Invalidating::Synonym::Suppression::Partial',
 							},
 							{
-								name: 'ICZN totally suppressed under',
+								name: 'ICZN Totally Suppressed Under',
 								value: 'TaxonNameRelationship::Iczn::Invalidating::Synonym::Suppression::Total',
 							},
 							{
-								name: 'ICZN family-group name form of',
+								name: 'ICZN Family-Group Name Form Of',
 								value: 'TaxonNameRelationship::Iczn::Invalidating::Usage::FamilyGroupNameForm',
 							},
 							{
-								name: 'ICZN family-group name original form of',
+								name: 'ICZN Family-Group Name Original Form Of',
 								value: 'TaxonNameRelationship::Iczn::Invalidating::Usage::FamilyGroupNameOriginalForm',
 							},
 							{
-								name: 'ICZN incorrect original spelling of',
+								name: 'ICZN Incorrect Original Spelling Of',
 								value: 'TaxonNameRelationship::Iczn::Invalidating::Usage::IncorrectOriginalSpelling',
 							},
 							{
-								name: 'ICZN misspelling of',
+								name: 'ICZN Misspelling Of',
 								value: 'TaxonNameRelationship::Iczn::Invalidating::Usage::Misspelling',
 							},
 							{
-								name: 'ICZN has priority as a result of the first revisor action over',
+								name: 'ICZN Has Priority as a Result of the First Revisor Action Over',
 								value: 'TaxonNameRelationship::Iczn::PotentiallyValidating::FirstRevisorAction',
 							},
 							{
@@ -3026,115 +3024,115 @@ export class TaxonWorks implements INodeType {
 								value: 'TaxonNameRelationship::Iczn::Validating::ConservedWork',
 							},
 							{
-								name: 'ICZN incertae sedis in',
+								name: 'ICZN Incertae Sedis In',
 								value: 'TaxonNameRelationship::Iczn::Validating::UncertainPlacement',
 							},
 							{
-								name: 'ICN alternative family name of',
+								name: 'ICN Alternative Family Name Of',
 								value: 'TaxonNameRelationship::Icn::Accepting::AlternativeFamilyName',
 							},
 							{
-								name: 'ICN conserved of',
+								name: 'ICN Conserved Of',
 								value: 'TaxonNameRelationship::Icn::Accepting::ConservedName',
 							},
 							{
-								name: 'ICN sanctioned of',
+								name: 'ICN Sanctioned Of',
 								value: 'TaxonNameRelationship::Icn::Accepting::SanctionedName',
 							},
 							{
-								name: 'ICN unaccepted name of',
+								name: 'ICN Unaccepted Name Of',
 								value: 'TaxonNameRelationship::Icn::Unaccepting',
 							},
 							{
-								name: 'ICN junior homonym of',
+								name: 'ICN Junior Homonym Of',
 								value: 'TaxonNameRelationship::Icn::Unaccepting::Homonym',
 							},
 							{
-								name: 'ICN junior synonym of',
+								name: 'ICN Junior Synonym Of',
 								value: 'TaxonNameRelationship::Icn::Unaccepting::Synonym',
 							},
 							{
-								name: 'ICN heterotypic synonym of',
+								name: 'ICN Heterotypic Synonym Of',
 								value: 'TaxonNameRelationship::Icn::Unaccepting::Synonym::Heterotypic',
 							},
 							{
-								name: 'ICN homotypic synonym of',
+								name: 'ICN Homotypic Synonym Of',
 								value: 'TaxonNameRelationship::Icn::Unaccepting::Synonym::Homotypic',
 							},
 							{
-								name: 'ICN alternative name of',
+								name: 'ICN Alternative Name Of',
 								value: 'TaxonNameRelationship::Icn::Unaccepting::Synonym::Homotypic::AlternativeName',
 							},
 							{
-								name: 'ICN isonym of',
+								name: 'ICN Isonym Of',
 								value: 'TaxonNameRelationship::Icn::Unaccepting::Synonym::Homotypic::Isonym',
 							},
 							{
-								name: 'ICN orthographic variant of',
+								name: 'ICN Orthographic Variant Of',
 								value: 'TaxonNameRelationship::Icn::Unaccepting::Synonym::Homotypic::OrthographicVariant',
 							},
 							{
-								name: 'ICN misapplication of',
+								name: 'ICN Misapplication Of',
 								value: 'TaxonNameRelationship::Icn::Unaccepting::Misapplication',
 							},
 							{
-								name: 'ICN unaccepted name of',
+								name: 'ICN Unaccepted Name Of',
 								value: 'TaxonNameRelationship::Icn::Unaccepting::Usage',
 							},
 							{
-								name: 'ICN basionym of',
+								name: 'ICN Basionym Of',
 								value: 'TaxonNameRelationship::Icn::Unaccepting::Synonym::Homotypic::Basionym',
 							},
 							{
-								name: 'ICN misspelling of',
+								name: 'ICN Misspelling Of',
 								value: 'TaxonNameRelationship::Icn::Unaccepting::Usage::Misspelling',
 							},
 							{
-								name: 'ICNP conserved of',
+								name: 'ICNP Conserved Of',
 								value: 'TaxonNameRelationship::Icnp::Accepting::ConservedName',
 							},
 							{
-								name: 'ICNP unaccepted name of',
+								name: 'ICNP Unaccepted Name Of',
 								value: 'TaxonNameRelationship::Icnp::Unaccepting',
 							},
 							{
-								name: 'ICNP junior synonym of',
+								name: 'ICNP Junior Synonym Of',
 								value: 'TaxonNameRelationship::Icnp::Unaccepting::Synonym',
 							},
 							{
-								name: 'ICNP heterotypic later synonym of',
+								name: 'ICNP Heterotypic Later Synonym Of',
 								value: 'TaxonNameRelationship::Icnp::Unaccepting::Synonym::Heterotypic',
 							},
 							{
-								name: 'ICNP homotypic later synonym of',
+								name: 'ICNP Homotypic Later Synonym Of',
 								value: 'TaxonNameRelationship::Icnp::Unaccepting::Synonym::Homotypic',
 							},
 							{
-								name: 'ICNP later homonym of',
+								name: 'ICNP Later Homonym Of',
 								value: 'TaxonNameRelationship::Icnp::Unaccepting::Homonym',
 							},
 							{
-								name: 'ICNP misapplication of',
+								name: 'ICNP Misapplication Of',
 								value: 'TaxonNameRelationship::Icnp::Unaccepting::Misapplication',
 							},
 							{
-								name: 'ICNP unaccepted name of',
+								name: 'ICNP Unaccepted Name Of',
 								value: 'TaxonNameRelationship::Icnp::Unaccepting::Usage',
 							},
 							{
-								name: 'ICNP misspelling of',
+								name: 'ICNP Misspelling Of',
 								value: 'TaxonNameRelationship::Icnp::Unaccepting::Usage::Misspelling',
 							},
 							{
-								name: 'ICVCN incertae sedis in',
+								name: 'ICVCN Incertae Sedis In',
 								value: 'TaxonNameRelationship::Icvcn::Accepting::UncertainPlacement',
 							},
 							{
-								name: 'ICVCN unaccepted name of',
+								name: 'ICVCN Unaccepted Name Of',
 								value: 'TaxonNameRelationship::Icvcn::Unaccepting',
 							},
 							{
-								name: 'ICVCN suppressed under',
+								name: 'ICVCN Suppressed Under',
 								value: 'TaxonNameRelationship::Icvcn::Unaccepting::Supressed',
 							},
 						],
@@ -3143,13 +3141,13 @@ export class TaxonWorks implements INodeType {
 						displayName: 'Page',
 						name: 'page',
 						type: 'number',
-						default: '0',
+						default: 0,
 					},
 					{
 						displayName: 'Per',
 						name: 'per',
 						type: 'number',
-						default: '100',
+						default: 0,
 					},
 				],
 			},
@@ -3200,7 +3198,7 @@ export class TaxonWorks implements INodeType {
 						displayName: 'Citations',
 						name: 'citations',
 						type: 'boolean',
-						default: '',
+						default: false,
 					},
 					{
 						displayName: 'Date Range',
@@ -3267,7 +3265,7 @@ export class TaxonWorks implements INodeType {
 						displayName: 'Exact',
 						name: 'exact',
 						type: 'boolean',
-						default: '',
+						default: false,
 					},
 					{
 						displayName: 'Etymology',
@@ -3335,7 +3333,7 @@ export class TaxonWorks implements INodeType {
 								value: 'ICVCN',
 							},
 						],
-						default: '',
+						default: [],
 					},
 					{
 						displayName: 'Nomenclature Group',
@@ -3390,13 +3388,13 @@ export class TaxonWorks implements INodeType {
 						displayName: 'Page',
 						name: 'page',
 						type: 'number',
-						default: '0',
+						default: 0,
 					},
 					{
 						displayName: 'Per',
 						name: 'per',
 						type: 'number',
-						default: '100',
+						default: 0,
 					},
 					{
 						displayName: 'Scientific Name',
@@ -3415,58 +3413,58 @@ export class TaxonWorks implements INodeType {
 						displayName: 'Taxon Name Relationship Type',
 						name: 'taxonNameRelationshipType',
 						type: 'multiOptions',
-						default: '',
+						default: [],
 						options: [
 							{
-								name: 'ICZN unavailable or invalid, linked to',
+								name: 'ICZN Unavailable or Invalid, Linked To',
 								value: 'TaxonNameRelationship::Iczn::Invalidating',
 							},
 							{
-								name: 'ICZN homonym of',
+								name: 'ICZN Homonym Of',
 								value: 'TaxonNameRelationship::Iczn::Invalidating::Homonym',
 							},
 							{
-								name: 'ICZN primary homonym of',
+								name: 'ICZN Primary Homonym Of',
 								value: 'TaxonNameRelationship::Iczn::Invalidating::Homonym::Primary',
 							},
 							{
-								name: 'ICZN forgotten primary homonym of',
+								name: 'ICZN Forgotten Primary Homonym Of',
 								value: 'TaxonNameRelationship::Iczn::Invalidating::Homonym::Primary::Forgotten',
 							},
 							{
-								name: 'ICZN suppressed primary homonym of',
+								name: 'ICZN Suppressed Primary Homonym Of',
 								value: 'TaxonNameRelationship::Iczn::Invalidating::Homonym::Primary::Suppressed',
 							},
 							{
-								name: 'ICZN secondary homonym of',
+								name: 'ICZN Secondary Homonym Of',
 								value: 'TaxonNameRelationship::Iczn::Invalidating::Homonym::Secondary',
 							},
 							{
-								name: 'ICZN secondary homonym replaced before 1961 of',
+								name: 'ICZN Secondary Homonym Replaced Before 1961 Of',
 								value: 'TaxonNameRelationship::Iczn::Invalidating::Homonym::Secondary::Secondary1961',
 							},
 							{
-								name: 'ICZN misapplication, linked to',
+								name: 'ICZN Misapplication, Linked To',
 								value: 'TaxonNameRelationship::Iczn::Invalidating::Misapplication',
 							},
 							{
-								name: 'ICZN synonym of',
+								name: 'ICZN Synonym Of',
 								value: 'TaxonNameRelationship::Iczn::Invalidating::Synonym',
 							},
 							{
-								name: 'ICZN nomen oblitum of',
+								name: 'ICZN Nomen Oblitum Of',
 								value: 'TaxonNameRelationship::Iczn::Invalidating::Synonym::ForgottenName',
 							},
 							{
-								name: 'ICZN objective synonym of',
+								name: 'ICZN Objective Synonym Of',
 								value: 'TaxonNameRelationship::Iczn::Invalidating::Synonym::Objective',
 							},
 							{
-								name: 'ICZN replaced by',
+								name: 'ICZN Replaced By',
 								value: 'TaxonNameRelationship::Iczn::Invalidating::Synonym::Objective::ReplacedHomonym',
 							},
 							{
-								name: 'ICZN synonymic homonym of',
+								name: 'ICZN Synonymic Homonym Of',
 								value: 'TaxonNameRelationship::Iczn::Invalidating::Synonym::Objective::SynonymicHomonym',
 							},
 							{
@@ -3478,43 +3476,43 @@ export class TaxonWorks implements INodeType {
 								value: 'TaxonNameRelationship::Iczn::Invalidating::Synonym::Objective::UnnecessaryReplacementName',
 							},
 							{
-								name: 'ICZN subjective synonym of',
+								name: 'ICZN Subjective Synonym Of',
 								value: 'TaxonNameRelationship::Iczn::Invalidating::Synonym::Subjective',
 							},
 							{
-								name: 'ICZN suppressed under',
+								name: 'ICZN Suppressed Under',
 								value: 'TaxonNameRelationship::Iczn::Invalidating::Synonym::Suppression',
 							},
 							{
-								name: 'ICZN conditionaly suppressed under',
+								name: 'ICZN Conditionaly Suppressed Under',
 								value: 'TaxonNameRelationship::Iczn::Invalidating::Synonym::Suppression::Conditional',
 							},
 							{
-								name: 'ICZN partially suppressed under',
+								name: 'ICZN Partially Suppressed Under',
 								value: 'TaxonNameRelationship::Iczn::Invalidating::Synonym::Suppression::Partial',
 							},
 							{
-								name: 'ICZN totally suppressed under',
+								name: 'ICZN Totally Suppressed Under',
 								value: 'TaxonNameRelationship::Iczn::Invalidating::Synonym::Suppression::Total',
 							},
 							{
-								name: 'ICZN family-group name form of',
+								name: 'ICZN Family-Group Name Form Of',
 								value: 'TaxonNameRelationship::Iczn::Invalidating::Usage::FamilyGroupNameForm',
 							},
 							{
-								name: 'ICZN family-group name original form of',
+								name: 'ICZN Family-Group Name Original Form Of',
 								value: 'TaxonNameRelationship::Iczn::Invalidating::Usage::FamilyGroupNameOriginalForm',
 							},
 							{
-								name: 'ICZN incorrect original spelling of',
+								name: 'ICZN Incorrect Original Spelling Of',
 								value: 'TaxonNameRelationship::Iczn::Invalidating::Usage::IncorrectOriginalSpelling',
 							},
 							{
-								name: 'ICZN misspelling of',
+								name: 'ICZN Misspelling Of',
 								value: 'TaxonNameRelationship::Iczn::Invalidating::Usage::Misspelling',
 							},
 							{
-								name: 'ICZN has priority as a result of the first revisor action over',
+								name: 'ICZN Has Priority as a Result of the First Revisor Action Over',
 								value: 'TaxonNameRelationship::Iczn::PotentiallyValidating::FirstRevisorAction',
 							},
 							{
@@ -3538,115 +3536,115 @@ export class TaxonWorks implements INodeType {
 								value: 'TaxonNameRelationship::Iczn::Validating::ConservedWork',
 							},
 							{
-								name: 'ICZN incertae sedis in',
+								name: 'ICZN Incertae Sedis In',
 								value: 'TaxonNameRelationship::Iczn::Validating::UncertainPlacement',
 							},
 							{
-								name: 'ICN alternative family name of',
+								name: 'ICN Alternative Family Name Of',
 								value: 'TaxonNameRelationship::Icn::Accepting::AlternativeFamilyName',
 							},
 							{
-								name: 'ICN conserved of',
+								name: 'ICN Conserved Of',
 								value: 'TaxonNameRelationship::Icn::Accepting::ConservedName',
 							},
 							{
-								name: 'ICN sanctioned of',
+								name: 'ICN Sanctioned Of',
 								value: 'TaxonNameRelationship::Icn::Accepting::SanctionedName',
 							},
 							{
-								name: 'ICN unaccepted name of',
+								name: 'ICN Unaccepted Name Of',
 								value: 'TaxonNameRelationship::Icn::Unaccepting',
 							},
 							{
-								name: 'ICN junior homonym of',
+								name: 'ICN Junior Homonym Of',
 								value: 'TaxonNameRelationship::Icn::Unaccepting::Homonym',
 							},
 							{
-								name: 'ICN junior synonym of',
+								name: 'ICN Junior Synonym Of',
 								value: 'TaxonNameRelationship::Icn::Unaccepting::Synonym',
 							},
 							{
-								name: 'ICN heterotypic synonym of',
+								name: 'ICN Heterotypic Synonym Of',
 								value: 'TaxonNameRelationship::Icn::Unaccepting::Synonym::Heterotypic',
 							},
 							{
-								name: 'ICN homotypic synonym of',
+								name: 'ICN Homotypic Synonym Of',
 								value: 'TaxonNameRelationship::Icn::Unaccepting::Synonym::Homotypic',
 							},
 							{
-								name: 'ICN alternative name of',
+								name: 'ICN Alternative Name Of',
 								value: 'TaxonNameRelationship::Icn::Unaccepting::Synonym::Homotypic::AlternativeName',
 							},
 							{
-								name: 'ICN isonym of',
+								name: 'ICN Isonym Of',
 								value: 'TaxonNameRelationship::Icn::Unaccepting::Synonym::Homotypic::Isonym',
 							},
 							{
-								name: 'ICN orthographic variant of',
+								name: 'ICN Orthographic Variant Of',
 								value: 'TaxonNameRelationship::Icn::Unaccepting::Synonym::Homotypic::OrthographicVariant',
 							},
 							{
-								name: 'ICN misapplication of',
+								name: 'ICN Misapplication Of',
 								value: 'TaxonNameRelationship::Icn::Unaccepting::Misapplication',
 							},
 							{
-								name: 'ICN unaccepted name of',
+								name: 'ICN Unaccepted Name Of',
 								value: 'TaxonNameRelationship::Icn::Unaccepting::Usage',
 							},
 							{
-								name: 'ICN basionym of',
+								name: 'ICN Basionym Of',
 								value: 'TaxonNameRelationship::Icn::Unaccepting::Synonym::Homotypic::Basionym',
 							},
 							{
-								name: 'ICN misspelling of',
+								name: 'ICN Misspelling Of',
 								value: 'TaxonNameRelationship::Icn::Unaccepting::Usage::Misspelling',
 							},
 							{
-								name: 'ICNP conserved of',
+								name: 'ICNP Conserved Of',
 								value: 'TaxonNameRelationship::Icnp::Accepting::ConservedName',
 							},
 							{
-								name: 'ICNP unaccepted name of',
+								name: 'ICNP Unaccepted Name Of',
 								value: 'TaxonNameRelationship::Icnp::Unaccepting',
 							},
 							{
-								name: 'ICNP junior synonym of',
+								name: 'ICNP Junior Synonym Of',
 								value: 'TaxonNameRelationship::Icnp::Unaccepting::Synonym',
 							},
 							{
-								name: 'ICNP heterotypic later synonym of',
+								name: 'ICNP Heterotypic Later Synonym Of',
 								value: 'TaxonNameRelationship::Icnp::Unaccepting::Synonym::Heterotypic',
 							},
 							{
-								name: 'ICNP homotypic later synonym of',
+								name: 'ICNP Homotypic Later Synonym Of',
 								value: 'TaxonNameRelationship::Icnp::Unaccepting::Synonym::Homotypic',
 							},
 							{
-								name: 'ICNP later homonym of',
+								name: 'ICNP Later Homonym Of',
 								value: 'TaxonNameRelationship::Icnp::Unaccepting::Homonym',
 							},
 							{
-								name: 'ICNP misapplication of',
+								name: 'ICNP Misapplication Of',
 								value: 'TaxonNameRelationship::Icnp::Unaccepting::Misapplication',
 							},
 							{
-								name: 'ICNP unaccepted name of',
+								name: 'ICNP Unaccepted Name Of',
 								value: 'TaxonNameRelationship::Icnp::Unaccepting::Usage',
 							},
 							{
-								name: 'ICNP misspelling of',
+								name: 'ICNP Misspelling Of',
 								value: 'TaxonNameRelationship::Icnp::Unaccepting::Usage::Misspelling',
 							},
 							{
-								name: 'ICVCN incertae sedis in',
+								name: 'ICVCN Incertae Sedis In',
 								value: 'TaxonNameRelationship::Icvcn::Accepting::UncertainPlacement',
 							},
 							{
-								name: 'ICVCN unaccepted name of',
+								name: 'ICVCN Unaccepted Name Of',
 								value: 'TaxonNameRelationship::Icvcn::Unaccepting',
 							},
 							{
-								name: 'ICVCN suppressed under',
+								name: 'ICVCN Suppressed Under',
 								value: 'TaxonNameRelationship::Icvcn::Unaccepting::Supressed',
 							},
 						],
@@ -3655,526 +3653,526 @@ export class TaxonWorks implements INodeType {
 						displayName: 'Taxon Name Classification Type',
 						name: 'taxonNameClassificationType',
 						type: 'multiOptions',
-						default: '',
+						default: [],
 						options: [
 							{
-								name: 'ICZN available',
+								name: 'ICZN Available',
 								value: 'TaxonNameClassification::Iczn::Available',
 							},
 							{
-								name: 'ICZN invalid',
+								name: 'ICZN Invalid',
 								value: 'TaxonNameClassification::Iczn::Available::Invalid',
 							},
 							{
-								name: 'ICZN homonym',
+								name: 'ICZN Homonym',
 								value: 'TaxonNameClassification::Iczn::Available::Invalid::Homonym',
 							},
 							{
-								name: 'ICZN homonymy of type genus',
+								name: 'ICZN Homonymy of Type Genus',
 								value: 'TaxonNameClassification::Iczn::Available::Invalid::HomonymyOfTypeGenus',
 							},
 							{
-								name: 'ICZN suppression of type genus',
+								name: 'ICZN Suppression of Type Genus',
 								value: 'TaxonNameClassification::Iczn::Available::Invalid::SuppressionOfTypeGenus',
 							},
 							{
-								name: 'ICZN synonymy of type genus before 1961',
+								name: 'ICZN Synonymy of Type Genus Before 1961',
 								value: 'TaxonNameClassification::Iczn::Available::Invalid::SynonymyOfTypeGenusBefore1961',
 							},
 							{
-								name: 'ICZN official list of family group names in zoology',
+								name: 'ICZN Official List of Family Group Names in Zoology',
 								value: 'TaxonNameClassification::Iczn::Available::OfficialListOfFamilyGroupNamesInZoology',
 							},
 							{
-								name: 'ICZN official list of generic names in zoology',
+								name: 'ICZN Official List of Generic Names in Zoology',
 								value: 'TaxonNameClassification::Iczn::Available::OfficialListOfGenericNamesInZoology',
 							},
 							{
-								name: 'ICZN official list of specific names in zoology',
+								name: 'ICZN Official List of Specific Names in Zoology',
 								value: 'TaxonNameClassification::Iczn::Available::OfficialListOfSpecificNamesInZoology',
 							},
 							{
-								name: 'ICZN official list of works approved as available',
+								name: 'ICZN Official List of Works Approved as Available',
 								value: 'TaxonNameClassification::Iczn::Available::OfficialListOfWorksApprovedAsAvailable',
 							},
 							{
-								name: 'ICZN valid',
+								name: 'ICZN Valid',
 								value: 'TaxonNameClassification::Iczn::Available::Valid',
 							},
 							{
-								name: 'ICZN nomen dubium',
+								name: 'ICZN Nomen Dubium',
 								value: 'TaxonNameClassification::Iczn::Available::Valid::NomenDubium',
 							},
 							{
-								name: 'ICZN nomen inquirendum',
+								name: 'ICZN Nomen Inquirendum',
 								value: 'TaxonNameClassification::Iczn::Available::Valid::NomenInquirendum',
 							},
 							{
-								name: 'ICZN collective group',
+								name: 'ICZN Collective Group',
 								value: 'TaxonNameClassification::Iczn::CollectiveGroup',
 							},
 							{
-								name: 'ICN effectively published',
+								name: 'ICN Effectively Published',
 								value: 'TaxonNameClassification::Icn::EffectivelyPublished',
 							},
 							{
-								name: 'ICN invalidly published',
+								name: 'ICN Invalidly Published',
 								value: 'TaxonNameClassification::Icn::EffectivelyPublished::InvalidlyPublished',
 							},
 							{
-								name: 'ICN as synonym',
+								name: 'ICN as Synonym',
 								value: 'TaxonNameClassification::Icn::EffectivelyPublished::InvalidlyPublished::AsSynonym',
 							},
 							{
-								name: 'ICN nomen nudum',
+								name: 'ICN Nomen Nudum',
 								value: 'TaxonNameClassification::Icn::EffectivelyPublished::InvalidlyPublished::NomenNudum',
 							},
 							{
-								name: 'ICN non binomial',
+								name: 'ICN Non Binomial',
 								value: 'TaxonNameClassification::Icn::EffectivelyPublished::InvalidlyPublished::NonBinomial',
 							},
 							{
-								name: 'ICN not latin',
+								name: 'ICN Not Latin',
 								value: 'TaxonNameClassification::Icn::EffectivelyPublished::InvalidlyPublished::NotLatin',
 							},
 							{
-								name: 'ICN provisional',
+								name: 'ICN Provisional',
 								value: 'TaxonNameClassification::Icn::EffectivelyPublished::InvalidlyPublished::Provisional',
 							},
 							{
-								name: 'ICN rejected publication',
+								name: 'ICN Rejected Publication',
 								value: 'TaxonNameClassification::Icn::EffectivelyPublished::InvalidlyPublished::RejectedPublication',
 							},
 							{
-								name: 'ICN tautonym',
+								name: 'ICN Tautonym',
 								value: 'TaxonNameClassification::Icn::EffectivelyPublished::InvalidlyPublished::Tautonym',
 							},
 							{
-								name: 'ICN validly published',
+								name: 'ICN Validly Published',
 								value: 'TaxonNameClassification::Icn::EffectivelyPublished::ValidlyPublished',
 							},
 							{
-								name: 'ICN illegitimate',
+								name: 'ICN Illegitimate',
 								value: 'TaxonNameClassification::Icn::EffectivelyPublished::ValidlyPublished::Illegitimate',
 							},
 							{
-								name: 'ICN homonym',
+								name: 'ICN Homonym',
 								value: 'TaxonNameClassification::Icn::EffectivelyPublished::ValidlyPublished::Illegitimate::Homonym',
 							},
 							{
-								name: 'ICN incorrect original spelling',
+								name: 'ICN Incorrect Original Spelling',
 								value: 'TaxonNameClassification::Icn::EffectivelyPublished::ValidlyPublished::Illegitimate::IncorrectOriginalSpelling',
 							},
 							{
-								name: 'ICN superfluous',
+								name: 'ICN Superfluous',
 								value: 'TaxonNameClassification::Icn::EffectivelyPublished::ValidlyPublished::Illegitimate::Superfluous',
 							},
 							{
-								name: 'ICN legitimate',
+								name: 'ICN Legitimate',
 								value: 'TaxonNameClassification::Icn::EffectivelyPublished::ValidlyPublished::Legitimate',
 							},
 							{
-								name: 'ICN adopted by persoon',
+								name: 'ICN Adopted by Persoon',
 								value: 'TaxonNameClassification::Icn::EffectivelyPublished::ValidlyPublished::Legitimate::AdoptedByPersoon',
 							},
 							{
-								name: 'ICN autonym',
+								name: 'ICN Autonym',
 								value: 'TaxonNameClassification::Icn::EffectivelyPublished::ValidlyPublished::Legitimate::Autonym',
 							},
 							{
-								name: 'ICN conserved',
+								name: 'ICN Conserved',
 								value: 'TaxonNameClassification::Icn::EffectivelyPublished::ValidlyPublished::Legitimate::Conserved',
 							},
 							{
-								name: 'ICN conserved spelling',
+								name: 'ICN Conserved Spelling',
 								value: 'TaxonNameClassification::Icn::EffectivelyPublished::ValidlyPublished::Legitimate::ConservedSpelling',
 							},
 							{
-								name: 'ICN correct',
+								name: 'ICN Correct',
 								value: 'TaxonNameClassification::Icn::EffectivelyPublished::ValidlyPublished::Legitimate::Correct',
 							},
 							{
-								name: 'ICN incorrect',
+								name: 'ICN Incorrect',
 								value: 'TaxonNameClassification::Icn::EffectivelyPublished::ValidlyPublished::Legitimate::Incorrect',
 							},
 							{
-								name: 'ICN nomen novum',
+								name: 'ICN Nomen Novum',
 								value: 'TaxonNameClassification::Icn::EffectivelyPublished::ValidlyPublished::Legitimate::NomenNovum',
 							},
 							{
-								name: 'ICN nothotaxon',
+								name: 'ICN Nothotaxon',
 								value: 'TaxonNameClassification::Icn::EffectivelyPublished::ValidlyPublished::Legitimate::Nothotaxon',
 							},
 							{
-								name: 'ICN official list',
+								name: 'ICN Official List',
 								value: 'TaxonNameClassification::Icn::EffectivelyPublished::ValidlyPublished::Legitimate::OfficialList',
 							},
 							{
-								name: 'ICN sanctioned',
+								name: 'ICN Sanctioned',
 								value: 'TaxonNameClassification::Icn::EffectivelyPublished::ValidlyPublished::Legitimate::Sanctioned',
 							},
 							{
-								name: 'ICNP effectively published',
+								name: 'ICNP Effectively Published',
 								value: 'TaxonNameClassification::Icnp::EffectivelyPublished',
 							},
 							{
-								name: 'ICNP invalidly published',
+								name: 'ICNP Invalidly Published',
 								value: 'TaxonNameClassification::Icnp::EffectivelyPublished::InvalidlyPublished',
 							},
 							{
-								name: 'ICNP nomen nudum',
+								name: 'ICNP Nomen Nudum',
 								value: 'TaxonNameClassification::Icnp::EffectivelyPublished::InvalidlyPublished::NomenNudum',
 							},
 							{
-								name: 'ICNP validly published',
+								name: 'ICNP Validly Published',
 								value: 'TaxonNameClassification::Icnp::EffectivelyPublished::ValidlyPublished',
 							},
 							{
-								name: 'ICNP illegitimate',
+								name: 'ICNP Illegitimate',
 								value: 'TaxonNameClassification::Icnp::EffectivelyPublished::ValidlyPublished::Illegitimate',
 							},
 							{
-								name: 'ICNP homonym',
+								name: 'ICNP Homonym',
 								value: 'TaxonNameClassification::Icnp::EffectivelyPublished::ValidlyPublished::Illegitimate::Homonym',
 							},
 							{
-								name: 'ICNP not in official list',
+								name: 'ICNP Not in Official List',
 								value: 'TaxonNameClassification::Icnp::EffectivelyPublished::ValidlyPublished::Illegitimate::NotInOfficialList',
 							},
 							{
-								name: 'ICNP rejected',
+								name: 'ICNP Rejected',
 								value: 'TaxonNameClassification::Icnp::EffectivelyPublished::ValidlyPublished::Illegitimate::Rejected',
 							},
 							{
-								name: 'ICNP legitimate',
+								name: 'ICNP Legitimate',
 								value: 'TaxonNameClassification::Icnp::EffectivelyPublished::ValidlyPublished::Legitimate',
 							},
 							{
-								name: 'ICNP candidatus',
+								name: 'ICNP Candidatus',
 								value: 'TaxonNameClassification::Icnp::EffectivelyPublished::ValidlyPublished::Legitimate::Candidatus',
 							},
 							{
-								name: 'ICNP correct',
+								name: 'ICNP Correct',
 								value: 'TaxonNameClassification::Icnp::EffectivelyPublished::ValidlyPublished::Legitimate::Correct',
 							},
 							{
-								name: 'ICNP incorrect',
+								name: 'ICNP Incorrect',
 								value: 'TaxonNameClassification::Icnp::EffectivelyPublished::ValidlyPublished::Legitimate::Incorrect',
 							},
 							{
-								name: 'ICNP nomen novum',
+								name: 'ICNP Nomen Novum',
 								value: 'TaxonNameClassification::Icnp::EffectivelyPublished::ValidlyPublished::Legitimate::NomenNovum',
 							},
 							{
-								name: 'ICNP official list',
+								name: 'ICNP Official List',
 								value: 'TaxonNameClassification::Icnp::EffectivelyPublished::ValidlyPublished::Legitimate::OfficialList',
 							},
 							{
-								name: 'ICZN fossil',
+								name: 'ICZN Fossil',
 								value: 'TaxonNameClassification::Iczn::Fossil',
 							},
 							{
-								name: 'ICZN ichnotaxon',
+								name: 'ICZN Ichnotaxon',
 								value: 'TaxonNameClassification::Iczn::Fossil::Ichnotaxon',
 							},
 							{
-								name: 'ICN fossil',
+								name: 'ICN Fossil',
 								value: 'TaxonNameClassification::Icn::Fossil',
 							},
 							{
-								name: 'ICN hybrid',
+								name: 'ICN Hybrid',
 								value: 'TaxonNameClassification::Icn::Hybrid',
 							},
 							{
-								name: 'ICVCN invalid',
+								name: 'ICVCN Invalid',
 								value: 'TaxonNameClassification::Icvcn::Invalid',
 							},
 							{
-								name: 'ICN not effectively published',
+								name: 'ICN Not Effectively Published',
 								value: 'TaxonNameClassification::Icn::NotEffectivelyPublished',
 							},
 							{
-								name: 'ICNP not effectively published',
+								name: 'ICNP Not Effectively Published',
 								value: 'TaxonNameClassification::Icnp::NotEffectivelyPublished',
 							},
 							{
-								name: 'ICZN unavailable',
+								name: 'ICZN Unavailable',
 								value: 'TaxonNameClassification::Iczn::Unavailable',
 							},
 							{
-								name: 'ICZN based on suppressed genus',
+								name: 'ICZN Based on Suppressed Genus',
 								value: 'TaxonNameClassification::Iczn::Unavailable::BasedOnSuppressedGenus',
 							},
 							{
-								name: 'ICZN excluded',
+								name: 'ICZN Excluded',
 								value: 'TaxonNameClassification::Iczn::Unavailable::Excluded',
 							},
 							{
-								name: 'ICZN based on fossil genus formula',
+								name: 'ICZN Based on Fossil Genus Formula',
 								value: 'TaxonNameClassification::Iczn::Unavailable::Excluded::BasedOnFossilGenusFormula',
 							},
 							{
-								name: 'ICZN hypothetical concept',
+								name: 'ICZN Hypothetical Concept',
 								value: 'TaxonNameClassification::Iczn::Unavailable::Excluded::HypotheticalConcept',
 							},
 							{
-								name: 'ICZN infrasubspecific',
+								name: 'ICZN Infrasubspecific',
 								value: 'TaxonNameClassification::Iczn::Unavailable::Excluded::Infrasubspecific',
 							},
 							{
-								name: 'ICZN name for hybrid',
+								name: 'ICZN Name for Hybrid',
 								value: 'TaxonNameClassification::Iczn::Unavailable::Excluded::NameForHybrid',
 							},
 							{
-								name: 'ICZN name for terratological specimen',
+								name: 'ICZN Name for Terratological Specimen',
 								value: 'TaxonNameClassification::Iczn::Unavailable::Excluded::NameForTerratologicalSpecimen',
 							},
 							{
-								name: 'ICZN not for nomenclature',
+								name: 'ICZN Not for Nomenclature',
 								value: 'TaxonNameClassification::Iczn::Unavailable::Excluded::NotForNomenclature',
 							},
 							{
-								name: 'ICZN temporary name',
+								name: 'ICZN Temporary Name',
 								value: 'TaxonNameClassification::Iczn::Unavailable::Excluded::TemporaryName',
 							},
 							{
-								name: 'ICZN work of extant animal after 1930',
+								name: 'ICZN Work of Extant Animal After 1930',
 								value: 'TaxonNameClassification::Iczn::Unavailable::Excluded::WorkOfExtantAnimalAfter1930',
 							},
 							{
-								name: 'ICZN zoological formula',
+								name: 'ICZN Zoological Formula',
 								value: 'TaxonNameClassification::Iczn::Unavailable::Excluded::ZoologicalFormula',
 							},
 							{
-								name: 'ICZN less than two letters',
+								name: 'ICZN Less than Two Letters',
 								value: 'TaxonNameClassification::Iczn::Unavailable::LessThanTwoLetters',
 							},
 							{
-								name: 'ICZN nomen nudum',
+								name: 'ICZN Nomen Nudum',
 								value: 'TaxonNameClassification::Iczn::Unavailable::NomenNudum',
 							},
 							{
-								name: 'ICZN ambiguous generic placement',
+								name: 'ICZN Ambiguous Generic Placement',
 								value: 'TaxonNameClassification::Iczn::Unavailable::NomenNudum::AmbiguousGenericPlacement',
 							},
 							{
-								name: 'ICZN anonymous authorship after 1950',
+								name: 'ICZN Anonymous Authorship After 1950',
 								value: 'TaxonNameClassification::Iczn::Unavailable::NomenNudum::AnonymousAuthorshipAfter1950',
 							},
 							{
-								name: 'ICZN citation of unavailable name',
+								name: 'ICZN Citation of Unavailable Name',
 								value: 'TaxonNameClassification::Iczn::Unavailable::NomenNudum::CitationOfUnavailableName',
 							},
 							{
-								name: 'ICZN conditionally proposed after 1960',
+								name: 'ICZN Conditionally Proposed After 1960',
 								value: 'TaxonNameClassification::Iczn::Unavailable::NomenNudum::ConditionallyProposedAfter1960',
 							},
 							{
-								name: 'ICZN electronic only publication before 2012',
+								name: 'ICZN Electronic only Publication Before 2012',
 								value: 'TaxonNameClassification::Iczn::Unavailable::NomenNudum::ElectronicOnlyPublicationBefore2012',
 							},
 							{
-								name: 'ICZN electronic publication not in pdf format',
+								name: 'ICZN Electronic Publication Not in Pdf Format',
 								value: 'TaxonNameClassification::Iczn::Unavailable::NomenNudum::ElectronicPublicationNotInPdfFormat',
 							},
 							{
-								name: 'ICZN electronic publication not registered in zoobank',
+								name: 'ICZN Electronic Publication Not Registered in Zoobank',
 								value: 'TaxonNameClassification::Iczn::Unavailable::NomenNudum::ElectronicPublicationNotRegisteredInZoobank',
 							},
 							{
-								name: 'ICZN electronic publication without issn or isbn',
+								name: 'ICZN Electronic Publication without Issn or Isbn',
 								value: 'TaxonNameClassification::Iczn::Unavailable::NomenNudum::ElectronicPublicationWithoutIssnOrIsbn',
 							},
 							{
-								name: 'ICZN ichnotaxon without type species after 1999',
+								name: 'ICZN Ichnotaxon without Type Species After 1999',
 								value: 'TaxonNameClassification::Iczn::Unavailable::NomenNudum::IchnotaxonWithoutTypeSpeciesAfter1999',
 							},
 							{
-								name: 'ICZN interpolated name',
+								name: 'ICZN Interpolated Name',
 								value: 'TaxonNameClassification::Iczn::Unavailable::NomenNudum::InterpolatedName',
 							},
 							{
-								name: 'ICZN no description',
+								name: 'ICZN No Description',
 								value: 'TaxonNameClassification::Iczn::Unavailable::NomenNudum::NoDescription',
 							},
 							{
-								name: 'ICZN no diagnosis after 1930',
+								name: 'ICZN No Diagnosis After 1930',
 								value: 'TaxonNameClassification::Iczn::Unavailable::NomenNudum::NoDiagnosisAfter1930',
 							},
 							{
-								name: 'ICZN no diagnosis after 1930 and rejected before 2000',
+								name: 'ICZN No Diagnosis After 1930 and Rejected Before 2000',
 								value: 'TaxonNameClassification::Iczn::Unavailable::NomenNudum::NoDiagnosisAfter1930AndRejectedBefore2000',
 							},
 							{
-								name: 'ICZN no type deposition statement after 1999',
+								name: 'ICZN No Type Deposition Statement After 1999',
 								value: 'TaxonNameClassification::Iczn::Unavailable::NomenNudum::NoTypeDepositionStatementAfter1999',
 							},
 							{
-								name: 'ICZN no type fixation after 1930',
+								name: 'ICZN No Type Fixation After 1930',
 								value: 'TaxonNameClassification::Iczn::Unavailable::NomenNudum::NoTypeFixationAfter1930',
 							},
 							{
-								name: 'ICZN no type genus citation after 1999',
+								name: 'ICZN No Type Genus Citation After 1999',
 								value: 'TaxonNameClassification::Iczn::Unavailable::NomenNudum::NoTypeGenusCitationAfter1999',
 							},
 							{
-								name: 'ICZN no type specimen fixation after 1999',
+								name: 'ICZN No Type Specimen Fixation After 1999',
 								value: 'TaxonNameClassification::Iczn::Unavailable::NomenNudum::NoTypeSpecimenFixationAfter1999',
 							},
 							{
-								name: 'ICZN not based on available genus name',
+								name: 'ICZN Not Based on Available Genus Name',
 								value: 'TaxonNameClassification::Iczn::Unavailable::NomenNudum::NotBasedOnAvailableGenusName',
 							},
 							{
-								name: 'ICZN not from genus name',
+								name: 'ICZN Not From Genus Name',
 								value: 'TaxonNameClassification::Iczn::Unavailable::NomenNudum::NotFromGenusName',
 							},
 							{
-								name: 'ICZN not indicated as new after 1999',
+								name: 'ICZN Not Indicated as New After 1999',
 								value: 'TaxonNameClassification::Iczn::Unavailable::NomenNudum::NotIndicatedAsNewAfter1999',
 							},
 							{
-								name: 'ICZN published as synonym after 1960',
+								name: 'ICZN Published as Synonym After 1960',
 								value: 'TaxonNameClassification::Iczn::Unavailable::NomenNudum::PublishedAsSynonymAfter1960',
 							},
 							{
-								name: 'ICZN published as synonym and not validated before 1961',
+								name: 'ICZN Published as Synonym and Not Validated Before 1961',
 								value: 'TaxonNameClassification::Iczn::Unavailable::NomenNudum::PublishedAsSynonymAndNotValidatedBefore1961',
 							},
 							{
-								name: 'ICZN replacement name without type fixation after 1930',
+								name: 'ICZN Replacement Name without Type Fixation After 1930',
 								value: 'TaxonNameClassification::Iczn::Unavailable::NomenNudum::ReplacementNameWithoutTypeFixationAfter1930',
 							},
 							{
-								name: 'ICZN non binominal',
+								name: 'ICZN Non Binominal',
 								value: 'TaxonNameClassification::Iczn::Unavailable::NonBinominal',
 							},
 							{
-								name: 'ICZN not uninominal',
+								name: 'ICZN Not Uninominal',
 								value: 'TaxonNameClassification::Iczn::Unavailable::NonBinominal::NotUninominal',
 							},
 							{
-								name: 'ICZN species not binominal',
+								name: 'ICZN Species Not Binominal',
 								value: 'TaxonNameClassification::Iczn::Unavailable::NonBinominal::SpeciesNotBinominal',
 							},
 							{
-								name: 'ICZN subgenus not intercalare',
+								name: 'ICZN Subgenus Not Intercalare',
 								value: 'TaxonNameClassification::Iczn::Unavailable::NonBinominal::SubgenusNotIntercalare',
 							},
 							{
-								name: 'ICZN subspecies not trinominal',
+								name: 'ICZN Subspecies Not Trinominal',
 								value: 'TaxonNameClassification::Iczn::Unavailable::NonBinominal::SubspeciesNotTrinominal',
 							},
 							{
-								name: 'ICZN not latin',
+								name: 'ICZN Not Latin',
 								value: 'TaxonNameClassification::Iczn::Unavailable::NotLatin',
 							},
 							{
-								name: 'ICZN not latinized after 1899',
+								name: 'ICZN Not Latinized After 1899',
 								value: 'TaxonNameClassification::Iczn::Unavailable::NotLatinizedAfter1899',
 							},
 							{
-								name: 'ICZN not latinized before 1900 and not accepted',
+								name: 'ICZN Not Latinized Before 1900 and Not Accepted',
 								value: 'TaxonNameClassification::Iczn::Unavailable::NotLatinizedBefore1900AndNotAccepted',
 							},
 							{
-								name: 'ICZN not nominative plural',
+								name: 'ICZN Not Nominative Plural',
 								value: 'TaxonNameClassification::Iczn::Unavailable::NotNominativePlural',
 							},
 							{
-								name: 'ICZN not noun in nominative singular',
+								name: 'ICZN Not Noun in Nominative Singular',
 								value: 'TaxonNameClassification::Iczn::Unavailable::NotNounInNominativeSingular',
 							},
 							{
-								name: 'ICZN not noun or adjective',
+								name: 'ICZN Not Noun or Adjective',
 								value: 'TaxonNameClassification::Iczn::Unavailable::NotNounOrAdjective',
 							},
 							{
-								name: 'ICZN not scientific plural',
+								name: 'ICZN Not Scientific Plural',
 								value: 'TaxonNameClassification::Iczn::Unavailable::NotScientificPlural',
 							},
 							{
-								name: 'ICZN pre linnean',
+								name: 'ICZN Pre Linnean',
 								value: 'TaxonNameClassification::Iczn::Unavailable::PreLinnean',
 							},
 							{
-								name: 'ICZN suppressed',
+								name: 'ICZN Suppressed',
 								value: 'TaxonNameClassification::Iczn::Unavailable::Suppressed',
 							},
 							{
-								name: 'ICZN not in official list of available names in zoology',
+								name: 'ICZN Not in Official List of Available Names in Zoology',
 								value: 'TaxonNameClassification::Iczn::Unavailable::Suppressed::NotInOfficialListOfAvailableNamesInZoology',
 							},
 							{
-								name: 'ICZN official index of rejected and invalid works in zoology',
+								name: 'ICZN Official Index of Rejected and Invalid Works in Zoology',
 								value: 'TaxonNameClassification::Iczn::Unavailable::Suppressed::OfficialIndexOfRejectedAndInvalidWorksInZoology',
 							},
 							{
-								name: 'ICZN official index of rejected family group names in zoology',
+								name: 'ICZN Official Index of Rejected Family Group Names in Zoology',
 								value: 'TaxonNameClassification::Iczn::Unavailable::Suppressed::OfficialIndexOfRejectedFamilyGroupNamesInZoology',
 							},
 							{
-								name: 'ICZN official index of rejected generic names in zoology',
+								name: 'ICZN Official Index of Rejected Generic Names in Zoology',
 								value: 'TaxonNameClassification::Iczn::Unavailable::Suppressed::OfficialIndexOfRejectedGenericNamesInZoology',
 							},
 							{
-								name: 'ICZN official index of rejected specific names in zoology',
+								name: 'ICZN Official Index of Rejected Specific Names in Zoology',
 								value: 'TaxonNameClassification::Iczn::Unavailable::Suppressed::OfficialIndexOfRejectedSpecificNamesInZoology',
 							},
 							{
-								name: 'ICZN unavailable and not used as valid before 2000',
+								name: 'ICZN Unavailable and Not Used as Valid Before 2000',
 								value: 'TaxonNameClassification::Iczn::Unavailable::UnavailableAndNotUsedAsValidBefore2000',
 							},
 							{
-								name: 'ICZN unavailable and rejected by author before 2000',
+								name: 'ICZN Unavailable and Rejected by Author Before 2000',
 								value: 'TaxonNameClassification::Iczn::Unavailable::UnavailableAndRejectedByAuthorBefore2000',
 							},
 							{
-								name: 'ICZN unavailable under iczn',
+								name: 'ICZN Unavailable Under Iczn',
 								value: 'TaxonNameClassification::Iczn::Unavailable::UnavailableUnderIczn',
 							},
 							{
-								name: 'ICZN variety or form after 1960',
+								name: 'ICZN Variety or Form After 1960',
 								value: 'TaxonNameClassification::Iczn::Unavailable::VarietyOrFormAfter1960',
 							},
 							{
-								name: 'ICVCN valid',
+								name: 'ICVCN Valid',
 								value: 'TaxonNameClassification::Icvcn::Valid',
 							},
 							{
-								name: 'ICVCN accepted',
+								name: 'ICVCN Accepted',
 								value: 'TaxonNameClassification::Icvcn::Valid::Accepted',
 							},
 							{
-								name: 'ICVCN unaccepted',
+								name: 'ICVCN Unaccepted',
 								value: 'TaxonNameClassification::Icvcn::Valid::Unaccepted',
 							},
 							{
-								name: 'Latinized feminine',
+								name: 'Latinized Feminine',
 								value: 'TaxonNameClassification::Latinized::Gender::Feminine',
 							},
 							{
-								name: 'Latinized masculine',
+								name: 'Latinized Masculine',
 								value: 'TaxonNameClassification::Latinized::Gender::Masculine',
 							},
 							{
-								name: 'Latinized neuter',
+								name: 'Latinized Neuter',
 								value: 'TaxonNameClassification::Latinized::Gender::Neuter',
 							},
 							{
-								name: 'Latinized adjective',
+								name: 'Latinized Adjective',
 								value: 'TaxonNameClassification::Latinized::PartOfSpeech::Adjective',
 							},
 							{
-								name: 'Latinized noun in apposition',
+								name: 'Latinized Noun in Apposition',
 								value: 'TaxonNameClassification::Latinized::PartOfSpeech::NounInApposition',
 							},
 							{
-								name: 'Latinized noun in genitive case',
+								name: 'Latinized Noun in Genitive Case',
 								value: 'TaxonNameClassification::Latinized::PartOfSpeech::NounInGenitiveCase',
 							},
 							{
-								name: 'Latinized participle',
+								name: 'Latinized Participle',
 								value: 'TaxonNameClassification::Latinized::PartOfSpeech::Participle',
 							},
 						],

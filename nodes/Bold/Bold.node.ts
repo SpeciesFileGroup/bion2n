@@ -6,7 +6,7 @@ import type {
 	INodeTypeDescription,
 	IHttpRequestOptions,
 } from 'n8n-workflow';
-import { NodeConnectionType } from 'n8n-workflow';
+import { NodeConnectionTypes } from 'n8n-workflow';
 
 export class Bold implements INodeType {
 	description: INodeTypeDescription = {
@@ -18,10 +18,9 @@ export class Bold implements INodeType {
 		description: 'A DNA barcode reference library',
 		defaults: {
 			name: 'BOLD',
-			color: '#8dbe42',
 		},
-		inputs: [NodeConnectionType.Main],
-		outputs: [NodeConnectionType.Main],
+		inputs: [NodeConnectionTypes.Main],
+		outputs: [NodeConnectionTypes.Main],
 		credentials: [
 		],
 		properties: [
@@ -29,6 +28,7 @@ export class Bold implements INodeType {
 				displayName: 'Resource',
 				name: 'resource',
 				type: 'options',
+				noDataExpression: true,
 				options: [
 					{
 						name: 'Combined (Specimen + Sequence)',
@@ -39,22 +39,22 @@ export class Bold implements INodeType {
 						value: 'sequence',
 					},
 					{
-						name: 'Specimen',
+						name: 'Speciman',
 						value: 'specimen',
 					},
 					{
-						name: 'Stats',
+						name: 'Stat',
 						value: 'stats',
 					},
 				],
-				default: '',
+				default: 'combined',
 				required: true,
-				description: 'Resource to consume',
 			},
 			{
 				displayName: 'Operation',
 				name: 'operation',
 				type: 'options',
+				noDataExpression: true,
 				displayOptions: {
 					show: {
 						resource: [
@@ -70,10 +70,10 @@ export class Bold implements INodeType {
 						name: 'Get',
 						value: 'get',
 						description: 'Get a resource',
+						action: 'Get a combined',
 					},
 				],
 				default: 'get',
-				description: 'The operation to perform.',
 			},
 			{
 				displayName: 'Additional Fields',

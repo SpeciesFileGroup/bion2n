@@ -6,7 +6,7 @@ import type {
 	INodeTypeDescription,
 	IHttpRequestOptions,
 } from 'n8n-workflow';
-import { NodeConnectionType } from 'n8n-workflow';
+import { NodeConnectionTypes, NodeOperationError } from 'n8n-workflow';
 
 export class Wikidata implements INodeType {
 	description: INodeTypeDescription = {
@@ -18,10 +18,9 @@ export class Wikidata implements INodeType {
 		description: 'Wikidata is a free and open knowledge base that can be read and edited by both humans and machines',
 		defaults: {
 			name: 'Wikidata',
-			color: '#990000',
 		},
-		inputs: [NodeConnectionType.Main],
-		outputs: [NodeConnectionType.Main],
+		inputs: [NodeConnectionTypes.Main],
+		outputs: [NodeConnectionTypes.Main],
 		credentials: [
 		],
 		properties: [
@@ -29,6 +28,7 @@ export class Wikidata implements INodeType {
 				displayName: 'Resource',
 				name: 'resource',
 				type: 'options',
+				noDataExpression: true,
 				options: [
 					{
 						name: 'Query',
@@ -37,12 +37,12 @@ export class Wikidata implements INodeType {
 				],
 				default: 'query',
 				required: true,
-				description: 'Resource to consume',
 			},
 			{
 				displayName: 'Operation',
 				name: 'operation',
 				type: 'options',
+				noDataExpression: true,
 				displayOptions: {
 					show: {
 						resource: [
@@ -55,10 +55,10 @@ export class Wikidata implements INodeType {
 						name: 'Get',
 						value: 'get',
 						description: 'Get a SPARQL query result',
+						action: 'Get a query',
 					},
 				],
 				default: 'get',
-				description: 'The operation to perform.',
 			},
 			{
 				displayName: 'Server',
@@ -108,21 +108,35 @@ export class Wikidata implements INodeType {
 		// const qs: IDataObject = {};
 
 		for (let i = 0; i < items.length; i++) {
-			const apiUrl = this.getNodeParameter('server', i) as IDataObject;
-			if (operation === 'get') {
-				const query = encodeURIComponent(this.getNodeParameter('query', i) as string);
+			try {
+				const apiUrl = this.getNodeParameter('server', i) as IDataObject;
+				if (operation === 'get') {
+					const query = encodeURIComponent(this.getNodeParameter('query', i) as string);
 
-				const options: IHttpRequestOptions = {
-					headers: {
-						'Accept': 'application/json',
-					},
-					method: 'GET',
-					url: `${apiUrl}/sparql?format=json&query=${query}`,
-					json: true,
-				};
+					const options: IHttpRequestOptions = {
+						headers: {
+							'Accept': 'application/json',
+						},
+						method: 'GET',
+						url: `${apiUrl}/sparql?format=json&query=${query}`,
+						json: true,
+					};
 
-				responseData = await this.helpers.request(options);
-				returnData.push(responseData['results']['bindings'][0]);
+					responseData = await this.helpers.request(options);
+					returnData.push(...responseData['results']['bindings']);
+				}
+			} catch (error) {
+				if (this.continueOnFail()) {
+					items.push({ json: this.getInputData(i)[0].json, error, pairedItem: i });
+				} else {
+					if (error.context) {
+						error.context.itemIndex = i;
+						throw error;
+					}
+					throw new NodeOperationError(this.getNode(), error, {
+						itemIndex: i,
+					});
+				}
 			}
 		}
 		return [this.helpers.returnJsonArray(returnData)];

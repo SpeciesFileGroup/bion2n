@@ -6,7 +6,7 @@ import type {
 	INodeTypeDescription,
 	IHttpRequestOptions,
 } from 'n8n-workflow';
-import { NodeConnectionType } from 'n8n-workflow';
+import { NodeConnectionTypes } from 'n8n-workflow';
 
 export class OpenTree implements INodeType {
 	description: INodeTypeDescription = {
@@ -18,11 +18,10 @@ export class OpenTree implements INodeType {
 		description: 'Open Tree of Life constructs a comprehensive, dynamic and digitally-available tree of life by synthesizing published phylogenetic trees',
 		defaults: {
 			name: 'OpenTree',
-			color: '#9f8e58',
 		},
 		subtitle: '={{$parameter["operation"] + ":" + $parameter["resource"]}}',
-		outputs: [NodeConnectionType.Main],
-		inputs: [NodeConnectionType.Main],
+		outputs: [NodeConnectionTypes.Main],
+		inputs: [NodeConnectionTypes.Main],
 		credentials: [
 		],
 		properties: [
@@ -30,19 +29,20 @@ export class OpenTree implements INodeType {
 				displayName: 'Resource',
 				name: 'resource',
 				type: 'options',
+				noDataExpression: true,
 				options: [
 					{
-						name: 'Studies: Find studies',
+						name: 'Studies: Find study',
 						value: 'studies_find_studies',
 						description: 'Return a list of studies that match a given property',
 					},
 					{
-						name: 'Studies: Find trees',
+						name: 'Studies: Find tree',
 						value: 'studies_find_trees',
 						description: 'Return a list of trees (and the studies that contain them) that match a given property',
 					},
 					{
-						name: 'Studies: Properties',
+						name: 'Studies: Property',
 						value: 'studies_properties',
 						description: 'Return a list of properties that can be used to search studies and trees',
 					},
@@ -52,12 +52,12 @@ export class OpenTree implements INodeType {
 						description: 'Return a study or tree from a study',
 					},
 					{
-						name: 'Synthetic tree: About',
+						name: 'Synthetic Tree: About',
 						value: 'tree_of_life_about',
 						description: 'Return information about the current synthetic tree',
 					},
 					{
-						name: 'Synthetic tree: Node info',
+						name: 'Synthetic Tree: Node Info',
 						value: 'tree_of_life_node_info',
 						description: 'Get information about a node in the tree',
 					},
@@ -67,32 +67,32 @@ export class OpenTree implements INodeType {
 						description: 'Return the most recent common ancestor of a list of nodes in the synthetic tree',
 					},
 					{
-						name: 'Synthetic tree: Subtree',
+						name: 'Synthetic Tree: Subtree',
 						value: 'tree_of_life_subtree',
 						description: 'Return the subtree below a given node',
 					},
 					{
-						name: 'Synthetic tree: Induced subtree',
+						name: 'Synthetic Tree: Induced Subtree',
 						value: 'tree_of_life_induced_subtree',
 						description: 'Return the induced subtree on the synthetic tree that relates a list of nodes',
 					},
 					{
-						name: 'Taxonomic name reconciliation: Match names',
+						name: 'Taxonomic Name Reconciliation: Match Name',
 						value: 'tnrs_match_names',
 						description: 'Returns a list of potential matches to known taxonomic names',
 					},
 					{
-						name: 'Taxonomic name reconciliation: Autocomplete name',
+						name: 'Taxonomic Name Reconciliation: Autocomplete Name',
 						value: 'tnrs_autocomplete_name',
 						description: 'Given an input string, return a list of potential matches based on taxonomic names that begin with that string',
 					},
 					{
-						name: 'Taxonomic name reconciliation: Contexts',
+						name: 'Taxonomic Name Reconciliation: Context',
 						value: 'tnrs_contexts',
-						description: 'Return a list of pre-defined taxonomic contexts (i.e. clades), which can be used to limit the scope of tnrs queries',
+						description: 'Return a list of pre-defined taxonomic contexts (i.e. clades), which can be used to limit the scope of tnrs queries.',
 					},
 					{
-						name: 'Taxonomic name reconciliation: Infer context',
+						name: 'Taxonomic Name Reconciliation: Infer Context',
 						value: 'tnrs_infer_context',
 						description: 'Return a taxonomic context given a list of taxonomic names',
 					},
@@ -104,27 +104,27 @@ export class OpenTree implements INodeType {
 					{
 						name: 'Taxonomy: Most recent common ancestor',
 						value: 'taxonomy_mrca',
-						description: 'Given a set of OTT ids, get the taxon that is the most recent common ancestor (the MRCA) of all the identified taxa',
+						description: 'Given a set of OTT IDs, get the taxon that is the most recent common ancestor (the MRCA) of all the identified taxa',
 					},
 					{
 						name: 'Taxonomy: Subtree',
 						value: 'taxonomy_subtree',
-						description: 'Given an OTT id, return complete taxonomy subtree descended from specified taxon',
+						description: 'Given an OTT ID, return complete taxonomy subtree descended from specified taxon',
 					},
 					{
 						name: 'Taxonomy: Taxon info',
 						value: 'taxonomy_taxon_info',
-						description: 'Given an OTT id, return information about the specified taxon',
+						description: 'Given an OTT ID, return information about the specified taxon',
 					},
 				],
-				default: '',
+				default: 'studies_find_studies',
 				required: true,
-				description: 'Resource to consume',
 			},
 			{
 				displayName: 'Operation',
 				name: 'operation',
 				type: 'options',
+				noDataExpression: true,
 				displayOptions: {
 					show: {
 						resource: [
@@ -137,15 +137,16 @@ export class OpenTree implements INodeType {
 						name: 'Get',
 						value: 'get',
 						description: 'Get a parsed resource',
+						action: 'Get a studies study',
 					},
 				],
 				default: 'get',
-				description: 'The operation to perform.',
 			},
 			{
 				displayName: 'Operation',
 				name: 'operation',
 				type: 'options',
+				noDataExpression: true,
 				displayOptions: {
 					show: {
 						resource: [
@@ -173,13 +174,13 @@ export class OpenTree implements INodeType {
 						name: 'Post',
 						value: 'post',
 						description: 'Post to a resource',
+						action: 'Post a studies find studies',
 					},
 				],
 				default: 'post',
-				description: 'The operation to perform.',
 			},
 			{
-				displayName: 'Include source list',
+				displayName: 'Include Source List',
 				name: 'include_source_list',
 				type: 'boolean',
 				displayOptions: {
@@ -193,7 +194,7 @@ export class OpenTree implements INodeType {
 					},
 				},
 				description: 'Return an ordered list of source trees',
-				default: 'false',
+				default: false,
 			},
 			{
 				displayName: 'Additional Fields',
@@ -234,10 +235,10 @@ export class OpenTree implements INodeType {
 						default: '',
 					},
 					{
-						displayName: 'Include lineage',
+						displayName: 'Include Lineage',
 						name: 'include_lineage',
 						type: 'boolean',
-						description: 'Include the ancestral lineage of the node in the synthetic tree.',
+						description: 'Include the ancestral lineage of the node in the synthetic tree',
 						default: false,
 					},
 				],
@@ -263,7 +264,7 @@ export class OpenTree implements INodeType {
 						displayName: 'Exclude Node IDs',
 						name: 'exclude_node_ids',
 						type: 'string',
-						description: 'A comma-separated list of node IDs to exclude (e.g., mrcaott102ott8118,mrcaott102ott283439,ott816256).',
+						description: 'A comma-separated list of node IDs to exclude (e.g., mrcaott102ott8118,mrcaott102ott283439,ott816256)',
 						default: '',
 					},
 					{
@@ -327,11 +328,11 @@ export class OpenTree implements INodeType {
 								value: 'newick',
 							},
 						],
-						description: 'Defines the tree format.',
+						description: 'Defines the tree format',
 						default: 'newick',
 					},
 					{
-						displayName: 'Label format',
+						displayName: 'Label Format',
 						name: 'label_format',
 						type: 'options',
 						displayOptions: {
@@ -355,14 +356,14 @@ export class OpenTree implements INodeType {
 								value: 'name_and_id',
 							},
 						],
-						description: 'Defines the label type for Newick format.',
+						description: 'Defines the label type for Newick format',
 						default: 'name_and_id',
 					},
 					{
-						displayName: 'Height limit',
+						displayName: 'Height Limit',
 						name: 'height_limit',
 						type: 'number',
-						description: 'The maximum number of edges on path between root and tips; limits the depth of the subtree; default = 3 with format=arguson; default = -1 (no limit) with format=newick.',
+						description: 'The maximum number of edges on path between root and tips; limits the depth of the subtree; default = 3 with format=arguson; default = -1 (no limit) with format=newick',
 						default: 3,
 					},
 				],
@@ -388,18 +389,18 @@ export class OpenTree implements INodeType {
 						displayName: 'Node IDs',
 						name: 'node_ids',
 						type: 'string',
-						description: 'A comma-separated list of node IDs (e.g., mrcaott102ott8118,mrcaott102ott283439,ott816256).',
+						description: 'A comma-separated list of node IDs (e.g., mrcaott102ott8118,mrcaott102ott283439,ott816256)',
 						default: '',
 					},
 					{
 						displayName: 'Open Tree Taxonomy IDs',
 						name: 'ott_ids',
 						type: 'string',
-						description: 'A comma-separated list of OTT IDs (e.g., 292466,267845,316878,102710).',
+						description: 'A comma-separated list of OTT IDs (e.g., 292466,267845,316878,102710)',
 						default: '',
 					},
 					{
-						displayName: 'Label format',
+						displayName: 'Label Format',
 						name: 'label_format',
 						type: 'options',
 						options: [
@@ -416,7 +417,7 @@ export class OpenTree implements INodeType {
 								value: 'name_and_id',
 							},
 						],
-						description: 'Defines the label type for Newick format.',
+						description: 'Defines the label type for Newick format',
 						default: 'name_and_id',
 					},
 				],
@@ -425,7 +426,7 @@ export class OpenTree implements INodeType {
 				displayName: 'Open Tree Taxonomy IDs',
 				name: 'ott_ids',
 				type: 'string',
-				description: 'A comma-separated list of OTT IDs (e.g., 292466,267845,316878,102710).',
+				description: 'A comma-separated list of OTT IDs (e.g., 292466,267845,316878,102710)',
 				default: '',
 				required: true,
 				displayOptions: {
@@ -460,11 +461,11 @@ export class OpenTree implements INodeType {
 						displayName: 'Open Tree Taxonomy ID',
 						name: 'ott_id',
 						type: 'string',
-						description: 'An OTT ID of the taxon of interest (e.g., 292466).',
+						description: 'An OTT ID of the taxon of interest (e.g., 292466)',
 						default: '',
 					},
 					{
-						displayName: 'Label format',
+						displayName: 'Label Format',
 						name: 'label_format',
 						type: 'options',
 						options: [
@@ -481,7 +482,7 @@ export class OpenTree implements INodeType {
 								value: 'name_and_id',
 							},
 						],
-						description: 'Defines the label type for Newick format.',
+						description: 'Defines the label type for Newick format',
 						default: 'name_and_id',
 					},
 				],
@@ -507,35 +508,35 @@ export class OpenTree implements INodeType {
 						displayName: 'Open Tree Taxonomy ID',
 						name: 'ott_id',
 						type: 'string',
-						description: 'An OTT ID of the taxon of interest (e.g., 292466).',
+						description: 'An OTT ID of the taxon of interest (e.g., 292466)',
 						default: '',
 					},
 					{
 						displayName: 'Source ID',
 						name: 'source_id',
 						type: 'string',
-						description: 'A source taxonomy id for the taxon of interest, in the form prefix:id (e.g., ncbi:9443 or irmng:11338). Valid prefixes are currently ncbi, gbif, worms, if, and irmng. Either ott_id or source_id must be given, but not both.',
+						description: 'A source taxonomy ID for the taxon of interest, in the form prefix:id (e.g., ncbi:9443 or irmng:11338). Valid prefixes are currently ncbi, gbif, worms, if, and irmng. Either ott_id or source_id must be given, but not both.',
 						default: '',
 					},
 					{
-						displayName: 'Include children',
+						displayName: 'Include Children',
 						name: 'include_children',
 						type: 'boolean',
-						description: 'Whether or not to include information about all the children of this taxon.',
+						description: 'Whether or not to include information about all the children of this taxon',
 						default: false,
 					},
 					{
-						displayName: 'Include lineage',
+						displayName: 'Include Lineage',
 						name: 'include_lineage',
 						type: 'boolean',
-						description: 'Whether or not to include information about all the higher level taxa that include this taxon.',
+						description: 'Whether or not to include information about all the higher level taxa that include this taxon',
 						default: false,
 					},
 					{
-						displayName: 'Include terminal descendants',
+						displayName: 'Include Terminal Descendants',
 						name: 'include_terminal_descendants',
 						type: 'boolean',
-						description: 'Provide a list of terminal OTT ids contained by this taxon.',
+						description: 'Provide a list of terminal OTT IDs contained by this taxon',
 						default: false,
 					},
 				],
@@ -576,13 +577,13 @@ export class OpenTree implements INodeType {
 				},
 				options: [
 					{
-						displayName: 'Context name',
+						displayName: 'Context Name',
 						name: 'context_name',
 						type: 'options',
-						description: 'The name of the taxonomic context to be searched.',
+						description: 'The name of the taxonomic context to be searched',
 						options: [
 							{
-								name: 'All life',
+								name: 'All Life',
 								value: 'All life',
 							},
 							{
@@ -662,7 +663,7 @@ export class OpenTree implements INodeType {
 								value: 'Ciliates',
 							},
 							{
-								name: 'Club mosses',
+								name: 'Club Mosses',
 								value: 'Club mosses',
 							},
 							{
@@ -686,7 +687,7 @@ export class OpenTree implements INodeType {
 								value: 'Ferns',
 							},
 							{
-								name: 'Flowering plants',
+								name: 'Flowering Plants',
 								value: 'Flowering plants',
 							},
 							{
@@ -710,7 +711,7 @@ export class OpenTree implements INodeType {
 								value: 'Insects',
 							},
 							{
-								name: 'Land plants',
+								name: 'Land Plants',
 								value: 'Land plants',
 							},
 							{
@@ -750,11 +751,11 @@ export class OpenTree implements INodeType {
 								value: 'Rosids',
 							},
 							{
-								name: 'SAR group',
+								name: 'SAR Group',
 								value: 'SAR group',
 							},
 							{
-								name: 'Seed plants',
+								name: 'Seed Plants',
 								value: 'Seed plants',
 							},
 							{
@@ -766,7 +767,7 @@ export class OpenTree implements INodeType {
 								value: 'Tetrapods',
 							},
 							{
-								name: 'Vascular plants',
+								name: 'Vascular Plants',
 								value: 'Vascular plants',
 							},
 							{
@@ -777,14 +778,14 @@ export class OpenTree implements INodeType {
 						default: 'All life',
 					},
 					{
-						displayName: 'Approximate matching',
+						displayName: 'Approximate Matching',
 						name: 'do_approximate_matching',
 						type: 'boolean',
 						description: 'Whether or not to perform approximate string (a.k.a. "fuzzy") matching. Will greatly improve speed if false.',
 						default: false,
 					},
 					{
-						displayName: 'Include suppressed',
+						displayName: 'Include Suppressed',
 						name: 'include_suppressed',
 						type: 'boolean',
 						description: 'When false, we suppress taxa with certain flags from the TNRS service. The taxonomy documentation contains a list of the these flags. https://github.com/OpenTreeOfLife/reference-taxonomy/wiki/Taxon-flags#flags-leading-to-taxa-being-unavailable-for-tnrs',
@@ -798,7 +799,7 @@ export class OpenTree implements INodeType {
 				type: 'string',
 				default: '',
 				required: true,
-				description: 'A string containing a single name (or partial name prefix) to be queried.',
+				description: 'A string containing a single name (or partial name prefix) to be queried',
 				displayOptions: {
 					show: {
 						resource: [
@@ -828,13 +829,13 @@ export class OpenTree implements INodeType {
 				},
 				options: [
 					{
-						displayName: 'Context name',
+						displayName: 'Context Name',
 						name: 'context_name',
 						type: 'options',
-						description: 'The name of the taxonomic context to be searched.',
+						description: 'The name of the taxonomic context to be searched',
 						options: [
 							{
-								name: 'All life',
+								name: 'All Life',
 								value: 'All life',
 							},
 							{
@@ -914,7 +915,7 @@ export class OpenTree implements INodeType {
 								value: 'Ciliates',
 							},
 							{
-								name: 'Club mosses',
+								name: 'Club Mosses',
 								value: 'Club mosses',
 							},
 							{
@@ -938,7 +939,7 @@ export class OpenTree implements INodeType {
 								value: 'Ferns',
 							},
 							{
-								name: 'Flowering plants',
+								name: 'Flowering Plants',
 								value: 'Flowering plants',
 							},
 							{
@@ -962,7 +963,7 @@ export class OpenTree implements INodeType {
 								value: 'Insects',
 							},
 							{
-								name: 'Land plants',
+								name: 'Land Plants',
 								value: 'Land plants',
 							},
 							{
@@ -1002,11 +1003,11 @@ export class OpenTree implements INodeType {
 								value: 'Rosids',
 							},
 							{
-								name: 'SAR group',
+								name: 'SAR Group',
 								value: 'SAR group',
 							},
 							{
-								name: 'Seed plants',
+								name: 'Seed Plants',
 								value: 'Seed plants',
 							},
 							{
@@ -1018,7 +1019,7 @@ export class OpenTree implements INodeType {
 								value: 'Tetrapods',
 							},
 							{
-								name: 'Vascular plants',
+								name: 'Vascular Plants',
 								value: 'Vascular plants',
 							},
 							{
@@ -1029,7 +1030,7 @@ export class OpenTree implements INodeType {
 						default: 'All life',
 					},
 					{
-						displayName: 'Include suppressed',
+						displayName: 'Include Suppressed',
 						name: 'include_suppressed',
 						type: 'boolean',
 						description: 'When false, we suppress taxa with certain flags from the TNRS service. The taxonomy documentation contains a list of the these flags. https://github.com/OpenTreeOfLife/reference-taxonomy/wiki/Taxon-flags#flags-leading-to-taxa-being-unavailable-for-tnrs',
@@ -1076,7 +1077,7 @@ export class OpenTree implements INodeType {
 						displayName: 'Property',
 						name: 'property',
 						type: 'options',
-						description: 'The property to be searched.',
+						description: 'The property to be searched',
 						options: [
 							{
 								name: 'dc:subject',
@@ -1131,7 +1132,7 @@ export class OpenTree implements INodeType {
 								value: 'dc:creator',
 							},
 							{
-								name: 'xmlns',
+								name: 'Xmlns',
 								value: 'xmlns',
 							},
 							{
@@ -1147,7 +1148,7 @@ export class OpenTree implements INodeType {
 								value: 'tb:identifier.study.tb1',
 							},
 							{
-								name: 'id',
+								name: 'ID',
 								value: 'id',
 							},
 							{
@@ -1175,7 +1176,7 @@ export class OpenTree implements INodeType {
 								value: 'prism:section',
 							},
 							{
-								name: 'nexml2json',
+								name: 'Nexml2json',
 								value: 'nexml2json',
 							},
 							{
@@ -1183,7 +1184,7 @@ export class OpenTree implements INodeType {
 								value: 'ot:notIntendedForSynthesis',
 							},
 							{
-								name: 'ntrees',
+								name: 'Ntrees',
 								value: 'ntrees',
 							},
 							{
@@ -1191,7 +1192,7 @@ export class OpenTree implements INodeType {
 								value: 'treesById',
 							},
 							{
-								name: 'about',
+								name: 'About',
 								value: 'about',
 							},
 							{
@@ -1211,7 +1212,7 @@ export class OpenTree implements INodeType {
 								value: 'otusById',
 							},
 							{
-								name: 'nexmljson',
+								name: 'Nexmljson',
 								value: 'nexmljson',
 							},
 							{
@@ -1283,7 +1284,7 @@ export class OpenTree implements INodeType {
 								value: 'prism:creationDate',
 							},
 							{
-								name: 'version',
+								name: 'Version',
 								value: 'version',
 							},
 							{
@@ -1291,7 +1292,7 @@ export class OpenTree implements INodeType {
 								value: 'dcterms:bibliographicCitation',
 							},
 						],
-						default: '',
+						default: 'dc:subject',
 					},
 					{
 						displayName: 'Value',
@@ -1301,7 +1302,7 @@ export class OpenTree implements INodeType {
 						default: '',
 					},
 					{
-						displayName: 'Exact matching only',
+						displayName: 'Exact Matching Only',
 						name: 'exact',
 						type: 'boolean',
 						description: 'Whether to perform exact matching only. Note that fuzzy matching is only available for some string properties.',
@@ -1337,7 +1338,7 @@ export class OpenTree implements INodeType {
 						displayName: 'Property',
 						name: 'property',
 						type: 'options',
-						description: 'The property to be searched.',
+						description: 'The property to be searched',
 						options: [
 
 							{
@@ -1353,7 +1354,7 @@ export class OpenTree implements INodeType {
 								value: 'ot:nearestTaxonMRCAName',
 							},
 							{
-								name: 'meta',
+								name: 'Meta',
 								value: 'meta',
 							},
 							{
@@ -1437,15 +1438,15 @@ export class OpenTree implements INodeType {
 								value: 'ot:tag',
 							},
 							{
-								name: 'rootedge',
+								name: 'Rootedge',
 								value: 'rootedge',
 							},
 							{
-								name: 'label',
+								name: 'Label',
 								value: 'label',
 							},
 							{
-								name: 'ntips',
+								name: 'Ntips',
 								value: 'ntips',
 							},
 							{
@@ -1473,7 +1474,7 @@ export class OpenTree implements INodeType {
 								value: 'ot:MRCAOttId',
 							},
 						],
-						default: '',
+						default: 'ot:messages',
 					},
 					{
 						displayName: 'Value',
@@ -1483,7 +1484,7 @@ export class OpenTree implements INodeType {
 						default: '',
 					},
 					{
-						displayName: 'Exact matching only',
+						displayName: 'Exact Matching Only',
 						name: 'exact',
 						type: 'boolean',
 						description: 'Whether to perform exact matching only. Note that fuzzy matching is only available for some string properties.',
@@ -1504,7 +1505,7 @@ export class OpenTree implements INodeType {
 				type: 'string',
 				default: '',
 				required: true,
-				description: 'The ID for the study of interest.',
+				description: 'The ID for the study of interest',
 				displayOptions: {
 					show: {
 						resource: [
@@ -1537,7 +1538,7 @@ export class OpenTree implements INodeType {
 						displayName: 'Tree ID',
 						name: 'tree_id',
 						type: 'string',
-						description: 'The property to be searched.',
+						description: 'The property to be searched',
 						default: '',
 					},
 				],
