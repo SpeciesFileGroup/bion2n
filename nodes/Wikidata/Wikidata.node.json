@@ -1,8 +1,6 @@
 {
-    "node": "n8n-nodes-base.wikidata",
-    "nodeVersion": "1.0",
-    "codexVersion": "1.0",
-    "categories": [
-        "Data"
-    ]
+	"node": "n8n-nodes-base.wikidata",
+	"nodeVersion": "1.0",
+	"codexVersion": "1.0",
+	"categories": ["Data"]
 }
