@@ -45,8 +45,11 @@
       "dist/nodes/GlobalNames/GlobalNames.node.js",
       "dist/nodes/GloBI/GloBI.node.js",
       "dist/nodes/Itis/Itis.node.js",
+      "dist/nodes/OpenAlex/OpenAlex.node.js",
+      "dist/nodes/OpenRefine/OpenRefine.node.js",
       "dist/nodes/OpenTree/OpenTree.node.js",
       "dist/nodes/TaxonWorks/TaxonWorks.node.js",
+      "dist/nodes/Unpaywall/Unpaywall.node.js",
       "dist/nodes/Wikidata/Wikidata.node.js",
       "dist/nodes/ZooBank/ZooBank.node.js"
     ]
