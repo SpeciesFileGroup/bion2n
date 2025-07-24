@@ -1,7 +1,7 @@
 {
   "name": "n8n-nodes-bion2n",
-  "version": "0.0.2",
-  "description": "Provides a set of nodes for n8n to interact with biodiversity informatics APIs including Bionomia, Barcode of Life (BOLD), Catalogue of Life (COL), ChecklistBank, Global Biodiversity Information Facility (GBIF), Global Names Architecture, Global Biotic Interactions (GloBI), Integrated Taxonomic Information System (ITIS), Open Tree of Life, TaxonWorks, Wikidata, and ZooBank.",
+  "version": "0.0.3",
+  "description": "Provides a set of nodes for n8n to interact with biodiversity informatics APIs including Bionomia, Barcode of Life (BOLD), Catalogue of Life (COL), ChecklistBank, Global Biodiversity Information Facility (GBIF), Global Names Architecture, Global Biotic Interactions (GloBI), Integrated Taxonomic Information System (ITIS), OpenAlex, OpenRefine, Open Tree of Life, TaxonWorks, Unpaywall, Wikidata, and ZooBank.",
   "keywords": [
     "n8n-community-node-package"
   ],

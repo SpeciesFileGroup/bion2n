@@ -30,8 +30,11 @@ Currently these APIs have nodes provided through BioN2N:
 * [Global Biotic Interactions (GloBI)](https://www.globalbioticinteractions.org)
 * [Global Names Architecture (GNA)](https://globalnames.org)
 * [Integrated Taxonomic Information System (ITIS)](https://itis.gov)
+* [OpenAlex](https://openalex.org)
+* [OpenRefine](https://openrefine.org)
 * [Open Tree of Life](https://tree.opentreeoflife.org)
 * [TaxonWorks](https://taxonworks.org/)
+* [Unpaywall](https://unpaywall.org)
 * [Wikidata](https://www.wikidata.org)
 * [ZooBank](https://zoobank.org/)
 
